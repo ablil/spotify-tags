@@ -1,7 +1,7 @@
 /* eslint-disable */
 'use client'
 import Header from "@/components/Header";
-import TrackList from "@/components/TrackList";
+import TrackList from "@/components/tracks/TrackList";
 import { useEffect, useState } from 'react';
 
 export default function Home() {

@@ -6,10 +6,14 @@ import MinusIcon from "@/svgs/MinusIcons";
 import OptionsIcon from "@/svgs/OptionsIcon";
 import PersonIcon from "@/svgs/PersonIcon";
 import SongIcon from "@/svgs/SongIcon";
-import { FC } from "react";
+import { FC, MouseEventHandler } from "react";
 import { Item, Menu, Separator, useContextMenu } from "react-contexify";
-import AudioPlayer from "./AudioPlayer";
-import Tag, { TagInLoadingState } from "./Tag";
+import PlayOrPauseButton from "../player/PlayOrPauseButton";
+import Tag, { TagInLoadingState } from "../tags/Tag";
+
+const isMobileDevice = () => {
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+};
 
 type Props = {
   track: Track;
@@ -17,18 +21,25 @@ type Props = {
   selectedTags: Array<string>;
   onSelectTag?: (tag: string) => void;
   isPlaying: boolean;
-  onPlay: () => void;
+  onPlay: (track: Track) => void;
 };
 
 const SpotifyTrack: FC<Props> = ({ track, onPlay, isPlaying, selectedTags, index, onSelectTag }) => {
   const cover = track.metadata.album.images[0];
   const artists = track.metadata.artists;
 
+  const onTrackClick: MouseEventHandler<HTMLDivElement> = (evt) => {
+    evt.stopPropagation()
+    if (isMobileDevice()) {
+      onPlay(track)
+    }
+   }
+
   return (
-    <article className="flex items-center gap-4 py-2 md:px-4 group hover:bg-zinc-700 duration-300">
+    <article onClick={onTrackClick} className="flex items-center gap-4 py-2 md:px-4 group hover:bg-zinc-700 duration-300">
       <div className="w-10 hidden md:block group-hover:hidden">{index + 1}</div>
       <div className="w-10 hidden group-hover:block">
-        <AudioPlayer onPlay={onPlay} isActive={isPlaying} audioUrl={track.metadata.preview_url} />
+        <PlayOrPauseButton isPlaying={isPlaying} onClick={() => onPlay(track)} />
       </div>
       <div>
         <img src={cover.url} height={50} width={50} />

@@ -1,6 +1,7 @@
 import { Track } from "@/lib/types";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import SpotifyTrack, { SpotifyTrackInLoadingState } from "./SpotifyTrack";
+import { Actions, useAppDispatch, useAppSelector } from "@/lib/store";
 
 type Props = {
   tracks?: Array<Track>;
@@ -8,11 +9,22 @@ type Props = {
   onSelectTag?: (tag: string) => void;
 };
 const TracksTable: FC<Props> = ({ tracks, selectedTags, onSelectTag }) => {
+  const dispatcher = useAppDispatch()
+  const player = useAppSelector(state => state.player)
   const [activeIndex, setActiveIndex] = useState<string | undefined>(); // Track currently playing audio
 
-  const handlePlay = (index: string) => {
-    setActiveIndex(index); // Set the active player index
+  const handlePlay = (track: Track) => {
+    setActiveIndex(track.id); // Set the active player index
+    dispatcher(Actions.playTrack(track))
   };
+
+  useEffect(() => {
+    if (player.playing) {
+      setActiveIndex(player.track?.id)
+    } else {
+      setActiveIndex(undefined)
+    }
+  }, [player])
 
   if (tracks) {
     return (
@@ -28,7 +40,7 @@ const TracksTable: FC<Props> = ({ tracks, selectedTags, onSelectTag }) => {
             onSelectTag={onSelectTag}
             index={index}
             selectedTags={selectedTags}
-            onPlay={() => handlePlay(track.id)}
+            onPlay={() => handlePlay(track)}
             isPlaying={activeIndex === track.id}
             track={track}
             key={track.id}

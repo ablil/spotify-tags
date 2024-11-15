@@ -21,6 +21,10 @@ type SliceState = {
     track?: Track;
     isOpen: boolean;
   };
+  player: {
+    track?: Track
+    playing: boolean
+  }
 };
 
 enum AppStatus {
@@ -46,6 +50,9 @@ const initialSlice: SliceState = {
   modal: {
     isOpen: false,
   },
+  player: {
+    playing: false
+  }
 };
 
 const slice = createSlice({
@@ -97,6 +104,16 @@ const slice = createSlice({
       state._tracks = removeTrack(action.payload, state._tracks);
       state._tags = state._tracks ? extractAllTags(state._tracks) : state._tags;
     },
+    playTrack: (state, action: PayloadAction<Track>) => {
+      state.player = {...state.player, track: action.payload, playing: !state.player.playing}
+    },
+    togglePlayer: (state, action: PayloadAction<boolean | undefined>) => {
+      if (action.payload !== undefined ) {
+        state.player.playing = action.payload
+      } else {
+        state.player.playing = !state.player.playing
+      }
+    }
   },
   extraReducers: (builder) =>
     builder.addCase(loadAllTracksAction, (state) => {

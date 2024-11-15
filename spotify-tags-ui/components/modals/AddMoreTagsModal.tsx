@@ -2,7 +2,7 @@ import { TagWrapper, Track } from "@/lib/types";
 import CheckboxIcon from "@/svgs/CheckboxIcon";
 import PlusIcon from "@/svgs/PlusIcon";
 import { FC, useEffect, useState } from "react";
-import CustomInput from "./CustomInput";
+import CustomInput from "../CustomInput";
 import ModalWrapper from "./ModalWrapper";
 import { matches } from "@/lib/utils";
 

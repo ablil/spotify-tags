@@ -12,10 +12,11 @@ import {
 } from "@/lib/store";
 import { useCallback, useEffect } from "react";
 import { Provider } from "react-redux";
-import SearchInput from "./SearchInput";
-import TagsFilters from "./TagsFilters";
+import SearchInput from "../SearchInput";
+import TagsFilters from "../tags/TagsFilters";
 import TracksTable from "./TracksTable";
-import AddMoreTagsModal from "./AddMoreTagsModal";
+import AddMoreTagsModal from "../modals/AddMoreTagsModal";
+import AudioPlayer from "../player/AudioPlayer";
 
 const TrackList = () => {
   const dispatcher = useAppDispatch();
@@ -67,6 +68,7 @@ const TrackList = () => {
 const wrapper = () => (
   <Provider store={store}>
     <TrackList />
+    <AudioPlayer />
   </Provider>
 );
 

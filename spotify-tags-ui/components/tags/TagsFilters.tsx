@@ -29,7 +29,7 @@ const TagsFilters: FC<Props> = ({ operator, toggleOperator, tags, onSelectTag, o
         <CloseButton onClick={() => onClearAll && onClearAll()} title="clear all filters" hidden={!hasAnySelectedTag} />
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 overflow-x-scroll">
         {tags?.map((tag) => (
           <Tag
             onClick={() => onSelectTag && onSelectTag(tag.tag)}
