@@ -60,7 +60,7 @@ function PushNotificationManager() {
  
  
   if (!isSupported) {
-    return <p>Push notifications are not supported in this browser.</p>
+    return null
   }
  
   return null

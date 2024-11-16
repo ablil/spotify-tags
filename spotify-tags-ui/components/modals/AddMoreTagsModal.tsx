@@ -27,8 +27,6 @@ const AddMoreTagsModal = () => {
     setKeyword('')
   }, [dispatcher])
 
-  // TODO: make the list of tags scrollable
-  
   return (
     <ModalWrapper isOpen={modal.isOpen} onClose={onClose}>
       <div>
@@ -52,7 +50,7 @@ const AddMoreTagsModal = () => {
           <span className="w-full h-full">Add tag</span>
         </div>
 
-        <article>
+        <article className="max-h-96 overflow-y-scroll">
           {filteredTags?.map((tag) => (
             <InternalTag
               tag={tag.tag}

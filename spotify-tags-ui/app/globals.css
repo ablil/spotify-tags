@@ -3,8 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* --background: #ffffff;
+  --foreground: #171717; */
+    --background: #0a0a0a;
+    --foreground: #ededed;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -72,14 +74,38 @@
   .contextmenu .menulabel {
     @apply px-2;
   }
-
+/* 
   .modal-overlay {
     @apply fixed inset-0 bg-black bg-opacity-50 flex justify-center pt-20 items-start z-50; 
   }
 
   .modal-content {
     @apply max-w-max min-w-32 bg-zinc-800 rounded-sm shadow-lg border border-zinc-700;
-  }
+  } */
+   /* Original modal overlay style */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex justify-center pt-20 items-start z-50;
+}
+
+/* Original modal content style */
+.modal-content {
+  @apply max-w-max min-w-32 bg-zinc-800 rounded-sm shadow-lg border border-zinc-700;
+}
+
+/* Mobile specific styles */
+.modal-overlay[data-mobile="true"] {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end z-50; /* Align modal to bottom on mobile */
+}
+
+.modal-content[data-mobile="true"] {
+  @apply w-full max-w-screen-xl bg-zinc-800 rounded-t-lg shadow-lg border border-zinc-700 transform translate-y-full transition-transform duration-300 ease-out; /* Slide up from the bottom */
+}
+
+/* State when modal is opened */
+.modal-overlay[data-mobile="true"] .modal-content {
+  @apply translate-y-0; /* Slide in */
+}
+
 }
 
 body {

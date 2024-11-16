@@ -6,13 +6,13 @@ import MinusIcon from "@/svgs/MinusIcons";
 import OptionsIcon from "@/svgs/OptionsIcon";
 import PersonIcon from "@/svgs/PersonIcon";
 import SongIcon from "@/svgs/SongIcon";
-import { FC, MouseEventHandler } from "react";
+import { FC } from "react";
 import { Item, Menu, Separator, useContextMenu } from "react-contexify";
 import PlayOrPauseButton from "../player/PlayOrPauseButton";
 import Tag, { TagInLoadingState } from "../tags/Tag";
 
-const isMobileDevice = () => {
-  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+export const isMobileDevice = () => {
+  return window.innerWidth <=642 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 };
 
 type Props = {
@@ -32,17 +32,11 @@ const SpotifyTrack: FC<Props> = ({ track, onPlayOrPause, isPlaying, selectedTags
   const artists = track.metadata.artists;
 
 
-  const onTrackClick: MouseEventHandler<HTMLDivElement> = (evt) => {
-    evt.stopPropagation()
-    if (isMobileDevice()) {
-      onPlayOrPause()
-    }
-   }
 
   return (
-    <article onClick={onTrackClick} className="flex items-center gap-4 py-2 md:px-4 group hover:bg-zinc-700 duration-300">
+    <article  className="flex items-center gap-4 py-2 md:px-4 group hover:bg-zinc-700 duration-300">
       <div className="w-10 hidden md:block group-hover:hidden">{index + 1}</div>
-      <div className="w-10 hidden group-hover:block">
+      <div className="w-10 hidden group-hover:block" hidden={isMobileDevice()}>
         <PlayOrPauseButton isPlaying={isPlaying} onClick={onPlayOrPause} />
       </div>
       <div>
@@ -80,7 +74,8 @@ const SpotifyTrack: FC<Props> = ({ track, onPlayOrPause, isPlaying, selectedTags
         ))}
       </div>
 
-      <div className="ml-auto">
+      <div className="ml-auto flex items-center gap-4">
+        <PlayOrPauseButton hidden={!isMobileDevice()} isPlaying={isPlaying} onClick={onPlayOrPause} />
         <TrackContextMenu callbacks={defaultContexMenuCallback} track={track} trackIndex={index} />
       </div>
     </article>
