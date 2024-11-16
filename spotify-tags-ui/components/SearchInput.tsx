@@ -32,7 +32,7 @@ const SearchInput: FC<Props> = ({ onKeywordChange, placeholder }) => {
     } else {
       onKeywordChange("");
     }
-  }, [isExpanded]);
+  }, [isExpanded, onKeywordChange]);
 
   return (
     <div className="search-input" data-expanded={isExpanded}>

@@ -1,29 +1,26 @@
 import { Track } from "@/lib/types";
 import React, { FC, useEffect, useState } from "react";
 import SpotifyTrack, { SpotifyTrackInLoadingState } from "./SpotifyTrack";
-import { Actions, useAppDispatch, useAppSelector } from "@/lib/store";
+import { Actions, filteredTracksSelector, useAppDispatch, useAppSelector } from "@/lib/store";
 
-type Props = {
-  tracks?: Array<Track>;
-  selectedTags: Array<string>;
-  onSelectTag?: (tag: string) => void;
-};
-const TracksTable: FC<Props> = ({ tracks, selectedTags, onSelectTag }) => {
+const TracksTable = () => {
   const dispatcher = useAppDispatch()
+
+  const tracks = useAppSelector(filteredTracksSelector);
+  const filters = useAppSelector(state => state.filters)
   const player = useAppSelector(state => state.player)
+
   const [activeIndex, setActiveIndex] = useState<string | undefined>(); // Track currently playing audio
 
-  const handlePlay = (track: Track) => {
+  const playTrack = (track: Track) => {
     setActiveIndex(track.id); // Set the active player index
     dispatcher(Actions.playTrack(track))
   };
 
+  const filterByTag = (tag: string) => { dispatcher(Actions.filterByTag(tag)) }
+
   useEffect(() => {
-    if (player.playing) {
-      setActiveIndex(player.track?.id)
-    } else {
-      setActiveIndex(undefined)
-    }
+    setActiveIndex(player.playing ? player.track?.id : undefined)
   }, [player])
 
   if (tracks) {
@@ -37,10 +34,10 @@ const TracksTable: FC<Props> = ({ tracks, selectedTags, onSelectTag }) => {
         </article>
         {tracks.map((track, index) => (
           <SpotifyTrack
-            onSelectTag={onSelectTag}
+            onSelectTag={filterByTag}
             index={index}
-            selectedTags={selectedTags}
-            onPlay={() => handlePlay(track)}
+            selectedTags={filters.tags}
+            onPlayOrPause={() => playTrack(track)}
             isPlaying={activeIndex === track.id}
             track={track}
             key={track.id}
@@ -50,6 +47,7 @@ const TracksTable: FC<Props> = ({ tracks, selectedTags, onSelectTag }) => {
     );
   }
 
+  // loading state
   return (
     <div className="divide-y divide-zinc-800">
       <article className="flex items-center gap-4 py-2 px-4">

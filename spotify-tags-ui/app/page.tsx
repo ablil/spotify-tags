@@ -1,17 +1,23 @@
 /* eslint-disable */
 'use client'
 import Header from "@/components/Header";
-import TrackList from "@/components/tracks/TrackList";
+import ModalsProvider from "@/components/providers/ModalsProvider";
+import StoreProvider from "@/components/providers/StoreProvider";
+import TrackList from "@/components/MainWrapper";
 import { useEffect, useState } from 'react';
 
 export default function Home() {
   return (
-    <main>
-      <PushNotificationManager />
-      <InstallPrompt />
-      <Header />
-      <TrackList />
-    </main>
+    <StoreProvider>
+      <ModalsProvider>
+        <main>
+          <PushNotificationManager />
+          <InstallPrompt />
+          <Header />
+          <TrackList />
+        </main>
+      </ModalsProvider>
+    </StoreProvider>
   );
 }
 

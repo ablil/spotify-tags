@@ -1,44 +1,39 @@
-import { TagWrapper, Track } from "@/lib/types";
+import { Actions, modalTagsSelector, updateTrackTagsActions, useAppDispatch, useAppSelector } from "@/lib/store";
+import { matches } from "@/lib/utils";
 import CheckboxIcon from "@/svgs/CheckboxIcon";
 import PlusIcon from "@/svgs/PlusIcon";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import CustomInput from "../CustomInput";
 import ModalWrapper from "./ModalWrapper";
-import { matches } from "@/lib/utils";
 
-type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  tags: Array<TagWrapper>;
-  track?: Track;
-  onAddOrRemoveTag: (tag: string) => void;
-};
+const AddMoreTagsModal = () => {
+  const dispatcher = useAppDispatch()
+  const modal = useAppSelector(state => state.modal)
+  const tags = useAppSelector(modalTagsSelector)
 
-const AddMoreTagsModal: FC<Props> = ({ isOpen, onClose, tags, onAddOrRemoveTag, track }) => {
-  const [filteredTags, setTags] = useState(tags);
   const [keyword, setKeyword] = useState("");
+  const filteredTags = useMemo(() => keyword.length > 0 ? tags.filter(tag => matches(tag.tag, keyword)) : tags, [tags, keyword])
 
-  const onCloseModal = () => {
-    setKeyword("");
-    onClose();
-  };
+  const toggleFilterByTag = (tag: string) => dispatcher(updateTrackTagsActions(tag))
 
   const onAddTag = () => {
     if (keyword.length > 0) {
-      onAddOrRemoveTag(keyword);
-      setKeyword("");
+      toggleFilterByTag(keyword)
     }
   };
 
-  useEffect(() => {
-    setTags(keyword.length > 0 ? tags.filter((tag) => matches(tag.tag, keyword)) : tags);
-  }, [keyword, tags]);
+  const onClose = useCallback(() => {
+    dispatcher(Actions.closeModal())
+    setKeyword('')
+  }, [dispatcher])
 
+  // TODO: make the list of tags scrollable
+  
   return (
-    <ModalWrapper isOpen={isOpen!} onClose={onCloseModal}>
+    <ModalWrapper isOpen={modal.isOpen} onClose={onClose}>
       <div>
         <header className="px-4 py-2 capitalize">
-          {track?.metadata.name} <small>by</small> {track?.metadata.artists[0].name}
+          {modal.track?.metadata.name} <small>by</small> {modal.track?.metadata.artists[0].name}
         </header>
 
         <div className="p-1">
@@ -63,7 +58,7 @@ const AddMoreTagsModal: FC<Props> = ({ isOpen, onClose, tags, onAddOrRemoveTag, 
               tag={tag.tag}
               key={tag.tag}
               initialyChecked={tag.selected}
-              onToggle={() => onAddOrRemoveTag(tag.tag)}
+              onToggle={() => toggleFilterByTag(tag.tag)}
             />
           ))}
         </article>

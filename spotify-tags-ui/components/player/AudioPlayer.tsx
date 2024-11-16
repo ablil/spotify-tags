@@ -1,5 +1,5 @@
 import { Actions, useAppDispatch, useAppSelector } from "@/lib/store";
-import { FC, useEffect, useRef } from "react";
+import { FC, useCallback, useEffect, useRef } from "react";
 import PlayOrPauseButton from "./PlayOrPauseButton";
 
 const AudioPlayer: FC = () => {
@@ -8,18 +8,22 @@ const AudioPlayer: FC = () => {
   const player = useAppSelector(state => state.player)
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  
+  const playOrPause = useCallback((playing?: boolean) => dispatcher(Actions.togglePlayer(playing)), [dispatcher])
+
 
   useEffect(() => {
     if (player.track) {
       audioRef.current = new Audio(player.track.metadata.preview_url)
+      playOrPause(true)
+
       // Stop the audio when it ends naturally
-      audioRef.current.onended = () => togglePlay(false);
-      togglePlay(true)
+      audioRef.current.onended = () => playOrPause(false);
     }
     return () => {
       audioRef.current?.pause()
     }
-  }, [player.track])
+  }, [playOrPause, player.track])
 
   useEffect(() => {
     if (player.playing) {
@@ -29,7 +33,6 @@ const AudioPlayer: FC = () => {
     }
   }, [player.playing]);
 
-  const togglePlay = (playing?: boolean) => dispatcher(Actions.togglePlayer(playing))
 
   if (player.track) {
     return (
@@ -57,7 +60,7 @@ const AudioPlayer: FC = () => {
           </p>
         </div>
         <div className="flex items-center justify-center text-green-500">
-          <PlayOrPauseButton isPlaying={player.playing} onClick={() => togglePlay()} />
+          <PlayOrPauseButton isPlaying={player.playing} onClick={() => playOrPause()} />
         </div>
       </div>
     );

@@ -1,38 +1,41 @@
-import { Operator, TagWrapper } from "@/lib/types";
+import { Actions, filterTagsSelector, useAppDispatch, useAppSelector } from "@/lib/store";
+import { Operator } from "@/lib/types";
 import CloseButton from "@/svgs/CloseButton";
-import { FC } from "react";
 import Tag, { TagInLoadingState } from "./Tag";
 
-type Props = {
-  tags?: Array<TagWrapper>;
-  operator: Operator;
-  toggleOperator: () => void;
-  onSelectTag: (tag: string) => void;
-  onClearAll: () => void;
-};
 
 // TODO: if you have a loooot of tags, check how they are displayed
-const TagsFilters: FC<Props> = ({ operator, toggleOperator, tags, onSelectTag, onClearAll }) => {
+const TagsFilters = () => {
+  const dispatcher = useAppDispatch()
+
+  const tags = useAppSelector(filterTagsSelector)
   const hasAnySelectedTag = tags?.some((tag) => tag.selected);
+
+  const filters = useAppSelector(state => state.filters)
+
+  const filterByTag = (tag: string) => dispatcher(Actions.filterByTag(tag))
+  const resetFilters = () => dispatcher(Actions.resetFilters())
+  const toggleOperator = () => dispatcher(Actions.toggleOperatorFilter())
+
 
   return (
     <div className="flex flex-col md:flex-row md:items-center gap-1">
       <div className="center-h">
         <div className="rounded-md p-1 logical-operators-wrapper max-w-min center-h">
-          <button disabled={operator === Operator.and} onClick={toggleOperator}>
+          <button disabled={filters.operator === Operator.and} onClick={toggleOperator}>
             all
           </button>
-          <button disabled={operator === Operator.or} onClick={toggleOperator}>
+          <button disabled={filters.operator === Operator.or} onClick={toggleOperator}>
             any
           </button>
         </div>
-        <CloseButton onClick={() => onClearAll && onClearAll()} title="clear all filters" hidden={!hasAnySelectedTag} />
+        <CloseButton onClick={resetFilters} title="clear all filters" hidden={!hasAnySelectedTag} />
       </div>
 
       <div className="flex items-center gap-1 overflow-x-scroll">
-        {tags?.map((tag) => (
+        {tags.map((tag) => (
           <Tag
-            onClick={() => onSelectTag && onSelectTag(tag.tag)}
+            onClick={() => filterByTag(tag.tag)}
             key={tag.tag}
             tag={tag.tag}
             selected={tag.selected}

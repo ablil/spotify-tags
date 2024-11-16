@@ -18,20 +18,23 @@ const isMobileDevice = () => {
 type Props = {
   track: Track;
   index: number;
+
   selectedTags: Array<string>;
   onSelectTag?: (tag: string) => void;
+
   isPlaying: boolean;
-  onPlay: (track: Track) => void;
+  onPlayOrPause: () => void;
 };
 
-const SpotifyTrack: FC<Props> = ({ track, onPlay, isPlaying, selectedTags, index, onSelectTag }) => {
-  const cover = track.metadata.album.images[0];
+const SpotifyTrack: FC<Props> = ({ track, onPlayOrPause, isPlaying, selectedTags, index, onSelectTag }) => {
+  const trackCover = track.metadata.album.images[0];
   const artists = track.metadata.artists;
+
 
   const onTrackClick: MouseEventHandler<HTMLDivElement> = (evt) => {
     evt.stopPropagation()
     if (isMobileDevice()) {
-      onPlay(track)
+      onPlayOrPause()
     }
    }
 
@@ -39,10 +42,10 @@ const SpotifyTrack: FC<Props> = ({ track, onPlay, isPlaying, selectedTags, index
     <article onClick={onTrackClick} className="flex items-center gap-4 py-2 md:px-4 group hover:bg-zinc-700 duration-300">
       <div className="w-10 hidden md:block group-hover:hidden">{index + 1}</div>
       <div className="w-10 hidden group-hover:block">
-        <PlayOrPauseButton isPlaying={isPlaying} onClick={() => onPlay(track)} />
+        <PlayOrPauseButton isPlaying={isPlaying} onClick={onPlayOrPause} />
       </div>
       <div>
-        <img src={cover.url} height={50} width={50} />
+        <img src={trackCover.url} height={50} width={50} />
       </div>
 
       <div className="mx-4 w-72">
