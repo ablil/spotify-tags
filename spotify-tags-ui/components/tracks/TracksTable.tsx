@@ -1,7 +1,7 @@
-import { Track } from "@/lib/types";
-import React, { FC, useEffect, useState } from "react";
-import SpotifyTrack, { SpotifyTrackInLoadingState } from "./SpotifyTrack";
 import { Actions, filteredTracksSelector, useAppDispatch, useAppSelector } from "@/lib/store";
+import { Track } from "@/lib/types";
+import { useEffect, useState } from "react";
+import SpotifyTrack, { SpotifyTrackInLoadingState } from "./SpotifyTrack";
 
 const TracksTable = () => {
   const dispatcher = useAppDispatch()

@@ -8,7 +8,7 @@ const AudioPlayer: FC = () => {
   const player = useAppSelector(state => state.player)
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  
+
   const playOrPause = useCallback((playing?: boolean) => dispatcher(Actions.togglePlayer(playing)), [dispatcher])
 
 
@@ -36,9 +36,9 @@ const AudioPlayer: FC = () => {
 
   if (player.track) {
     return (
-      <div className="sticky w-screen h-16 px-12 bottom-0 bg-black flex items-center justify-between">
-        <div>
-          <img className="mr-auto" src={player.track?.metadata.album.images[0].url} height={50} width={50} />
+      <div className="sticky w-full md:w-min h-16 rounded-full px-12 bottom-1 transform md:left-1/2 md:-translate-x-1/2 bg-white flex items-center justify-between text-black">
+        <div className="flex items-center justify-center">
+          <PlayOrPauseButton isPlaying={player.playing} onClick={() => playOrPause()} />
         </div>
         <div className="mx-4 w-72 text-center">
           <h1 className="tracking-tighter hover:underline" data-playing={player.playing} title="Open song on Spotify">
@@ -59,8 +59,9 @@ const AudioPlayer: FC = () => {
             ))}
           </p>
         </div>
-        <div className="flex items-center justify-center text-green-500">
-          <PlayOrPauseButton isPlaying={player.playing} onClick={() => playOrPause()} />
+
+        <div>
+          <img className="mr-auto" src={player.track?.metadata.album.images[0].url} height={50} width={50} />
         </div>
       </div>
     );

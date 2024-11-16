@@ -6,6 +6,7 @@ import {
 import { useEffect } from "react";
 import TagsFilters from "./tags/TagsFilters";
 import TracksTable from "./tracks/TracksTable";
+import AudioPlayer from "./player/AudioPlayer";
 
 const TrackList = () => {
   const dispatcher = useAppDispatch();
@@ -18,6 +19,7 @@ const TrackList = () => {
     <div className="bg-zinc-900 p-4 md:m-4 rounded-md">
       <TagsFilters />
       <TracksTable />
+      <AudioPlayer />
     </div>
   );
 };
