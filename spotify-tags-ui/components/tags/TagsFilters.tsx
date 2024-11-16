@@ -2,6 +2,7 @@ import { Actions, filterTagsSelector, useAppDispatch, useAppSelector } from "@/l
 import { Operator } from "@/lib/types";
 import CloseButton from "@/svgs/CloseButton";
 import Tag, { TagInLoadingState } from "./Tag";
+import { eq } from "@/lib/utils";
 
 
 // TODO: if you have a loooot of tags, check how they are displayed
@@ -38,7 +39,7 @@ const TagsFilters = () => {
             onClick={() => filterByTag(tag.tag)}
             key={tag.tag}
             tag={tag.tag}
-            selected={tag.selected}
+            selected={tag.selected || eq(tag.tag, filters.keyword ?? '')}
           />
         )) ?? <MultipleTagInLoadingState />}
       </div>

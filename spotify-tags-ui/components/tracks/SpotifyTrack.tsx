@@ -1,6 +1,6 @@
 import { defaultContexMenuCallback } from "@/lib/misc";
 import { ContextMenuCallbacks, Track } from "@/lib/types";
-import { includesIgnoreCase } from "@/lib/utils";
+import { eq, includesIgnoreCase } from "@/lib/utils";
 import LabelIcon from "@/svgs/LabelIcon";
 import MinusIcon from "@/svgs/MinusIcons";
 import OptionsIcon from "@/svgs/OptionsIcon";
@@ -18,6 +18,7 @@ const isMobileDevice = () => {
 type Props = {
   track: Track;
   index: number;
+  searchKeyword?: string;
 
   selectedTags: Array<string>;
   onSelectTag?: (tag: string) => void;
@@ -26,7 +27,7 @@ type Props = {
   onPlayOrPause: () => void;
 };
 
-const SpotifyTrack: FC<Props> = ({ track, onPlayOrPause, isPlaying, selectedTags, index, onSelectTag }) => {
+const SpotifyTrack: FC<Props> = ({ track, onPlayOrPause, isPlaying, selectedTags, index, onSelectTag, searchKeyword }) => {
   const trackCover = track.metadata.album.images[0];
   const artists = track.metadata.artists;
 
@@ -74,7 +75,7 @@ const SpotifyTrack: FC<Props> = ({ track, onPlayOrPause, isPlaying, selectedTags
             onClick={() => onSelectTag && onSelectTag(tag)}
             tag={tag}
             key={tag}
-            selected={includesIgnoreCase(selectedTags, tag)}
+            selected={includesIgnoreCase(selectedTags, tag) || eq(tag, searchKeyword ?? '')}
           />
         ))}
       </div>

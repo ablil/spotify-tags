@@ -58,7 +58,7 @@ function createFilterPredicate(filters: TracksFilter): (track: Track) => boolean
     );
   }
 
-  return predicates.length ? anyOf(...predicates) : () => true;
+  return predicates.length ? allOf(...predicates) : () => true;
 }
 
 export function filterAllTracks(tracks: Array<Track>, filters: TracksFilter): Array<Track> {

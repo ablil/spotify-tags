@@ -36,7 +36,7 @@ const AudioPlayer: FC = () => {
 
   if (player.track) {
     return (
-      <div className="sticky w-full md:w-min h-16 rounded-full px-12 bottom-1 transform md:left-1/2 md:-translate-x-1/2 bg-white flex items-center justify-between text-black">
+      <div className="sticky w-full md:w-min h-16 rounded-full px-12 bottom-4 transform md:left-1/2 md:-translate-x-1/2 bg-white flex items-center justify-between text-black">
         <div className="flex items-center justify-center">
           <PlayOrPauseButton isPlaying={player.playing} onClick={() => playOrPause()} />
         </div>

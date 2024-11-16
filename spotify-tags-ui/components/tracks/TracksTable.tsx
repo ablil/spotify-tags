@@ -36,6 +36,7 @@ const TracksTable = () => {
           <SpotifyTrack
             onSelectTag={filterByTag}
             index={index}
+            searchKeyword={filters.keyword}
             selectedTags={filters.tags}
             onPlayOrPause={() => playTrack(track)}
             isPlaying={activeIndex === track.id}
