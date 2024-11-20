@@ -2,14 +2,14 @@ import { configureStore, createAction, createSelector, createSlice, PayloadActio
 import { useDispatch, useSelector } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 import { allSagas } from "./sagas";
-import { Operator, Track, TracksFilter } from "./types";
+import { Operator, SortBy, SortDirection, Track, TracksFilter } from "./types";
 import {
   extractAndSortAllTags,
   filterAllTracks,
   includesIgnoreCase,
   removeIgnoreCase,
   removeTrack,
-  replaceTrack
+  replaceTrack,
 } from "./utils";
 
 type SliceState = {
@@ -22,9 +22,9 @@ type SliceState = {
     isOpen: boolean;
   };
   player: {
-    track?: Track
-    playing: boolean
-  }
+    track?: Track;
+    playing: boolean;
+  };
 };
 
 enum AppStatus {
@@ -42,6 +42,8 @@ const defaultFilters: TracksFilter = {
   tags: [],
   keyword: undefined,
   operator: Operator.or,
+  sortBy: SortBy.last_updated,
+  sortIn: SortDirection.desc,
 };
 
 const initialSlice: SliceState = {
@@ -51,8 +53,8 @@ const initialSlice: SliceState = {
     isOpen: false,
   },
   player: {
-    playing: false
-  }
+    playing: false,
+  },
 };
 
 const slice = createSlice({
@@ -80,6 +82,12 @@ const slice = createSlice({
     filterByKeyword: (state, action: PayloadAction<string>) => {
       state.filters = { ...state.filters, keyword: action.payload };
     },
+    sortBy: (state, action: PayloadAction<SortBy>) => {
+      state.filters = { ...state.filters, sortBy: action.payload };
+    },
+    sortIn: (state, action: PayloadAction<SortDirection>) => {
+      state.filters = { ...state.filters, sortIn: action.payload };
+    },
     toggleOperatorFilter: (state, action: PayloadAction<Operator>) => {
       state.filters = {
         ...state.filters,
@@ -105,15 +113,15 @@ const slice = createSlice({
       state._tags = state._tracks ? extractAndSortAllTags(state._tracks) : state._tags;
     },
     playTrack: (state, action: PayloadAction<Track>) => {
-      state.player = {...state.player, track: action.payload, playing: !state.player.playing}
+      state.player = { ...state.player, track: action.payload, playing: !state.player.playing };
     },
     togglePlayer: (state, action: PayloadAction<boolean | undefined>) => {
-      if (action.payload !== undefined ) {
-        state.player.playing = action.payload
+      if (action.payload !== undefined) {
+        state.player.playing = action.payload;
       } else {
-        state.player.playing = !state.player.playing
+        state.player.playing = !state.player.playing;
       }
-    }
+    },
   },
   extraReducers: (builder) =>
     builder.addCase(loadAllTracksAction, (state) => {

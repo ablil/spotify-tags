@@ -7,7 +7,6 @@ const Header = () => {
         <Logo />
         <h1>Spotify Tags</h1>
       </div>
-
     </article>
   );
 };

@@ -1,12 +1,10 @@
 "use client";
-import {
-  loadAllTracksAction,
-  useAppDispatch
-} from "@/lib/store";
+import { Actions, loadAllTracksAction, useAppDispatch } from "@/lib/store";
 import { useEffect } from "react";
 import AudioPlayer from "./player/AudioPlayer";
 import TracksTable from "./tracks/TracksTable";
 import TrackSearchInput from "./TrackSearchInput";
+import { SortBy, SortDirection } from "@/lib/types";
 
 const TrackList = () => {
   const dispatcher = useAppDispatch();
@@ -20,16 +18,29 @@ const TrackList = () => {
       <header className="flex items-center">
         <h1 className="text-white capitlize mb-4 mr-auto">Tracks</h1>
         <TrackSearchInput className="mx-2" />
-        <select name="sort" id="sort" className="bg-transparent opacity-50 text-sm">
-          <option value="last_updated">Sort by last updated</option>
-          <option value="title">Sort by title</option>
+        <select
+          name="sort"
+          id="sort"
+          className="select"
+          onChange={(evt) => dispatcher(Actions.sortBy(evt.target.value as SortBy))}
+        >
+          <option value={SortBy.last_updated}>Sort by last updated</option>
+          <option value={SortBy.title}>Sort by title</option>
+          <option value={SortBy.artist}>Sort by artist</option>
+        </select>
+        <select
+          name="sort_in"
+          id="sort_direction"
+          className="select"
+          onChange={(evt) => dispatcher(Actions.sortIn(evt.target.value as SortDirection))}
+        >
+          <option value={SortDirection.desc}>desc</option>
+          <option value={SortDirection.asc}>asc</option>
         </select>
       </header>
       <TracksTable />
-      <AudioPlayer />
     </div>
   );
 };
-
 
 export default TrackList;

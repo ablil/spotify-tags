@@ -1,4 +1,4 @@
-import { Operator, Predicate, Track, TracksFilter } from "./types";
+import { Operator, Predicate, SortBy, SortDirection, Track, TracksFilter } from "./types";
 
 export function equalsIgnoreCase(str1?: string, str2?: string): boolean {
   if (!str1 && !str2) return false;
@@ -61,8 +61,20 @@ function createFilterPredicate(filters: TracksFilter): (track: Track) => boolean
   return predicates.length ? allOf(...predicates) : () => true;
 }
 
+function createSortComparator(filters: TracksFilter): (item1: Track, item2: Track) => number {
+  let compartor: (item1: Track, item2: Track) => number = (item1, item2) =>
+    item1.metadata.name.localeCompare(item2.metadata.name);
+  if (filters.sortBy === SortBy.artist) {
+    compartor = (item1, item2) => item1.metadata.artists[0].name.localeCompare(item2.metadata.artists[0].name);
+  }
+  if (filters.sortBy === SortBy.last_updated) {
+    compartor = (item1, item2) => item1.last_updated - item2.last_updated;
+  }
+  return filters.sortIn === SortDirection.desc ? (a, b) => -compartor(a, b) : compartor;
+}
+
 export function filterAllTracks(tracks: Array<Track>, filters: TracksFilter): Array<Track> {
-  return tracks.filter(createFilterPredicate(filters));
+  return tracks.filter(createFilterPredicate(filters)).toSorted(createSortComparator(filters));
 }
 
 export function isTrackTaggedWith(track: Track, _tag: string, isExactMatch?: boolean) {

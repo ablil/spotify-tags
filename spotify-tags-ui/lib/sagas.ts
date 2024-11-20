@@ -10,7 +10,7 @@ function* loadAllTracks() {
     const tracks: Array<Track> = yield call(fetchAllTracks);
     yield put(Actions.tracksLoadedSuccessfully(tracks));
   } catch (err: unknown) {
-    console.error(err)
+    console.error(err);
     yield put(Actions.fetchAllTracksFailure());
   }
 }
@@ -23,7 +23,7 @@ function* updateTags({ payload: tag }: PayloadAction<string>) {
     const updatedTrack: Track = yield call(patchTrack, track.id, updatedTags);
     yield put(Actions.trackUpdated(updatedTrack));
   } catch (err: unknown) {
-    console.error(err)
+    console.error(err);
     alert("failed to updated tags, try again !");
   }
 }
@@ -33,7 +33,7 @@ function* deleteTrackWorker(action: PayloadAction<string>) {
     yield call(deleteTrack, action.payload);
     yield put(Actions.trackDeleted(action.payload));
   } catch (err: unknown) {
-    console.error(err)
+    console.error(err);
     alert("failed to updated tags, try again !");
   }
 }

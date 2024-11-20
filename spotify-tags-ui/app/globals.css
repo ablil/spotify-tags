@@ -32,6 +32,10 @@
   button[data-visible='false'] {
     @apply opacity-0;
   }
+
+  .select {
+    @apply bg-transparent text-sm opacity-80;
+  }
 }
 
 @layer components {

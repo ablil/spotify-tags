@@ -1,6 +1,7 @@
 export type Track = {
   id: string;
   tags: Array<string>;
+  last_updated: number;
   metadata: {
     preview_url: string;
     external_urls: {
@@ -29,14 +30,16 @@ export type TagWrapper = {
 };
 
 export enum Operator {
-  and = 'and',
-  or = 'or'
+  and = "and",
+  or = "or",
 }
 
 export type TracksFilter = {
   keyword?: string;
   tags: Array<string>;
   operator: Operator;
+  sortBy: SortBy;
+  sortIn: SortDirection;
 };
 
 export type Predicate<T> = (value: T) => boolean;
@@ -47,3 +50,13 @@ export type ContextMenuCallbacks = {
   onDelete: (id: string) => void;
   onAddMoreTags: (track: Track) => void;
 };
+
+export enum SortBy {
+  last_updated = "last_updated",
+  title = "title",
+  artist = "artist",
+}
+export enum SortDirection {
+  asc = "asc",
+  desc = "desc",
+}

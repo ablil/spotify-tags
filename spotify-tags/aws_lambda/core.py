@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import datetime
 from dataclasses import dataclass
 from typing import Set, List
 
@@ -32,7 +33,8 @@ class SpotifyTagger:
         result = self.table.put_item(Item={
             'id': track['id'],
             'tags': data.labels,
-            'metadata': track
+            'metadata': track,
+            'last_updated': int(datetime.datetime.now().timestamp()),
         })
         logger.info(f"saved track successfully", result)
 
@@ -54,8 +56,8 @@ class SpotifyTagger:
         logger.info("trying to update tags", id, param)
         result = self.table.update_item(
             Key={'id': id},
-            UpdateExpression='SET tags = :tags',
-            ExpressionAttributeValues={':tags': set(param)},
+            UpdateExpression='SET tags = :tags, last_updated = :last_updated',
+            ExpressionAttributeValues={':tags': set(param), ':last_updated': int(datetime.datetime.now().timestamp())},
             ReturnValues='ALL_NEW'
         )
         logger.info("updated tags", result)

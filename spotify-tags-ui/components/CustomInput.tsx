@@ -6,7 +6,7 @@ type Props = {
   keyword: string;
   onKeyword: (keyword: string) => void;
   placeHolder?: string;
-  className?: string
+  className?: string;
 };
 
 const CustomInput: FC<Props> = ({ keyword, onKeyword, placeHolder, className }) => {
@@ -27,7 +27,7 @@ const CustomInput: FC<Props> = ({ keyword, onKeyword, placeHolder, className }) 
   }, [keyword]);
 
   return (
-    <div className={ "center-h gap-2 p-1 bg-zinc-700" + className }>
+    <div className={"center-h gap-2 p-1 bg-zinc-700" + className}>
       <LoopIcon />
       <input
         className="w-full outline-none border-none bg-transparent"

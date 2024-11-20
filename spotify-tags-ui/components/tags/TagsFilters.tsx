@@ -11,7 +11,6 @@ import { useMemo, useState } from "react";
 const TagsFilters = () => {
   const dispatcher = useAppDispatch()
   const tags = useAppSelector(filterTagsSelector)
-  const filters = useAppSelector(state => state.filters)
 
   const [keyword, setKeyword] = useState('')
   const filteredTags = useMemo(() => tags.filter(tag => matches(tag.tag, keyword)), [keyword, tags])
@@ -34,7 +33,7 @@ const TagsFilters = () => {
 
       {hasAnyTagsSelected && (
         <div className="flex items-center justify-between p-4">
-          <select name="operator" id="operator" className="bg-transparent text-sm opacity-80" onChange={evt => toggleOperator(evt.currentTarget.value as Operator)}>
+          <select name="operator" id="operator" className="select" onChange={evt => toggleOperator(evt.currentTarget.value as Operator)}>
             <option value={Operator.or}>anyOf</option>
             <option value={Operator.and}>allOf</option>
           </select>
@@ -42,7 +41,7 @@ const TagsFilters = () => {
         </div>
       )}
 
-      <div className="">
+      <div>
         {filteredTags.map((tag) => (
           <button
             data-selected={tag.selected}
@@ -50,21 +49,11 @@ const TagsFilters = () => {
             key={tag.tag}
             onClick={() => filterByTag(tag.tag)}
           >{tag.tag}</button>
-        )) ?? <MultipleTagInLoadingState />}
+        ))}
       </div>
     </aside>
   );
 };
 
-const MultipleTagInLoadingState = () => {
-  return (
-    <>
-      <TagInLoadingState />
-      <TagInLoadingState />
-      <TagInLoadingState />
-      <TagInLoadingState />
-    </>
-  );
-};
 
 export default TagsFilters;
