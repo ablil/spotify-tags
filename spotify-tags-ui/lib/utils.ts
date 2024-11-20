@@ -33,8 +33,8 @@ export function anyOf<T>(...predicates: Predicate<T>[]): Predicate<T> {
   return (value: T) => predicates.some((predicate) => predicate(value));
 }
 
-export function extractAllTags(tracks: Array<Track>): Array<string> {
-  return [...new Set(tracks.flatMap((track) => track.tags.map((item) => item.toLowerCase())))];
+export function extractAndSortAllTags(tracks: Array<Track>): Array<string> {
+  return [...new Set(tracks.flatMap((track) => track.tags.map((item) => item.toLowerCase())))].toSorted();
 }
 
 function createFilterPredicate(filters: TracksFilter): (track: Track) => boolean {

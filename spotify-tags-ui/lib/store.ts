@@ -4,7 +4,7 @@ import createSagaMiddleware from "redux-saga";
 import { allSagas } from "./sagas";
 import { Operator, Track, TracksFilter } from "./types";
 import {
-  extractAllTags,
+  extractAndSortAllTags,
   filterAllTracks,
   includesIgnoreCase,
   removeIgnoreCase,
@@ -62,7 +62,7 @@ const slice = createSlice({
     tracksLoadedSuccessfully: (state, action: PayloadAction<Array<Track>>) => {
       state.status = AppStatus.done;
       state._tracks = action.payload;
-      state._tags = extractAllTags(action.payload);
+      state._tags = extractAndSortAllTags(action.payload);
     },
     fetchAllTracksFailure: (state) => {
       state.status = AppStatus.error;
@@ -80,15 +80,15 @@ const slice = createSlice({
     filterByKeyword: (state, action: PayloadAction<string>) => {
       state.filters = { ...state.filters, keyword: action.payload };
     },
-    toggleOperatorFilter: (state) => {
+    toggleOperatorFilter: (state, action: PayloadAction<Operator>) => {
       state.filters = {
         ...state.filters,
-        operator: state.filters.operator === Operator.and ? Operator.or : Operator.and,
+        operator: action.payload,
       };
     },
     trackUpdated: (state, action: PayloadAction<Track>) => {
       state._tracks = replaceTrack(action.payload, state._tracks);
-      state._tags = state._tracks ? extractAllTags(state._tracks) : state._tags;
+      state._tags = state._tracks ? extractAndSortAllTags(state._tracks) : state._tags;
       if (state.modal.track?.id === action.payload.id) {
         state.modal = { ...state.modal, track: action.payload };
       }
@@ -102,7 +102,7 @@ const slice = createSlice({
     },
     trackDeleted: (state, action: PayloadAction<string>) => {
       state._tracks = removeTrack(action.payload, state._tracks);
-      state._tags = state._tracks ? extractAllTags(state._tracks) : state._tags;
+      state._tags = state._tracks ? extractAndSortAllTags(state._tracks) : state._tags;
     },
     playTrack: (state, action: PayloadAction<Track>) => {
       state.player = {...state.player, track: action.payload, playing: !state.player.playing}

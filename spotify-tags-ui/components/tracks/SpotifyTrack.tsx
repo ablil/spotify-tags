@@ -35,9 +35,9 @@ const SpotifyTrack: FC<Props> = ({ track, onPlayOrPause, isPlaying, selectedTags
 
   return (
     <article  className="flex items-center gap-4 py-2 md:px-4 group hover:bg-zinc-700 duration-300">
-      <div className="w-10 hidden md:block group-hover:hidden">{index + 1}</div>
+      <div className="w-10 hidden md:block group-hover:hidden" hidden={isMobileDevice()}>{index + 1}</div>
       <div className="w-10 hidden group-hover:block" hidden={isMobileDevice()}>
-        <PlayOrPauseButton isPlaying={isPlaying} onClick={onPlayOrPause} />
+        <PlayOrPauseButton hidden={isMobileDevice()} isPlaying={isPlaying} onClick={onPlayOrPause} />
       </div>
       <div>
         <img src={trackCover.url} height={50} width={50} />

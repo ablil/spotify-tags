@@ -1,5 +1,4 @@
 import Logo from "@/svgs/Logo";
-import TrackSearchInput from "./TrackSearchInput";
 
 const Header = () => {
   return (
@@ -9,7 +8,6 @@ const Header = () => {
         <h1>Spotify Tags</h1>
       </div>
 
-      <TrackSearchInput className="absolute right-8" />
     </article>
   );
 };

@@ -6,9 +6,10 @@ type Props = {
   keyword: string;
   onKeyword: (keyword: string) => void;
   placeHolder?: string;
+  className?: string
 };
 
-const CustomInput: FC<Props> = ({ keyword, onKeyword, placeHolder }) => {
+const CustomInput: FC<Props> = ({ keyword, onKeyword, placeHolder, className }) => {
   const [_keyword, setKeyword] = useState(keyword);
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (evt) => {
@@ -26,7 +27,7 @@ const CustomInput: FC<Props> = ({ keyword, onKeyword, placeHolder }) => {
   }, [keyword]);
 
   return (
-    <div className="center-h gap-2 p-1 bg-zinc-700">
+    <div className={ "center-h gap-2 p-1 bg-zinc-700" + className }>
       <LoopIcon />
       <input
         className="w-full outline-none border-none bg-transparent"

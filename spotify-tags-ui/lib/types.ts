@@ -29,8 +29,8 @@ export type TagWrapper = {
 };
 
 export enum Operator {
-  and,
-  or,
+  and = 'and',
+  or = 'or'
 }
 
 export type TracksFilter = {

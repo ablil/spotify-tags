@@ -106,6 +106,13 @@
   @apply translate-y-0; /* Slide in */
 }
 
+  .sidebar-tag {
+    @apply hover:text-green-500 duration-300;
+  }
+
+  .sidebar-tag[data-selected='true'] {
+    @apply text-green-500 bg-zinc-800;
+  }
 }
 
 body {

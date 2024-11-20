@@ -5,16 +5,25 @@ import ModalsProvider from "@/components/providers/ModalsProvider";
 import StoreProvider from "@/components/providers/StoreProvider";
 import TrackList from "@/components/MainWrapper";
 import { useEffect, useState } from 'react';
+import SearchForTags from "@/components/tags/SearchForTags";
+import TagsFilters from "@/components/tags/TagsFilters";
 
 export default function Home() {
   return (
     <StoreProvider>
       <ModalsProvider>
+        <PushNotificationManager />
+        <InstallPrompt />
         <main>
-          <PushNotificationManager />
-          <InstallPrompt />
           <Header />
-          <TrackList />
+          <div className="flex">
+            <div className="w-1/5">
+            <TagsFilters />
+            </div>
+            <div className="w-4/5">
+              <TrackList />
+            </div>
+          </div>
         </main>
       </ModalsProvider>
     </StoreProvider>
