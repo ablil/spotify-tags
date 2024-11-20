@@ -1,13 +1,12 @@
 /* eslint-disable */
 "use client";
 import Header from "@/components/Header";
+import TrackList from "@/components/MainWrapper";
+import AudioPlayer from "@/components/player/AudioPlayer";
 import ModalsProvider from "@/components/providers/ModalsProvider";
 import StoreProvider from "@/components/providers/StoreProvider";
-import TrackList from "@/components/MainWrapper";
-import { useEffect, useState } from "react";
-import SearchForTags from "@/components/tags/SearchForTags";
 import TagsFilters from "@/components/tags/TagsFilters";
-import AudioPlayer from "@/components/player/AudioPlayer";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   return (

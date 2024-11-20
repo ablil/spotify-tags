@@ -1,13 +1,10 @@
 import { Actions, filterTagsSelector, useAppDispatch, useAppSelector } from "@/lib/store";
 import { Operator } from "@/lib/types";
-import CloseButton from "@/svgs/CloseButton";
-import Tag, { TagInLoadingState } from "./Tag";
-import { eq, matches } from "@/lib/utils";
-import CustomInput from "../CustomInput";
+import { matches } from "@/lib/utils";
 import { useMemo, useState } from "react";
+import CustomInput from "../CustomInput";
 
 
-// TODO: if you have a loooot of tags, check how they are displayed
 const TagsFilters = () => {
   const dispatcher = useAppDispatch()
   const tags = useAppSelector(filterTagsSelector)
@@ -16,7 +13,6 @@ const TagsFilters = () => {
   const filteredTags = useMemo(() => tags.filter(tag => matches(tag.tag, keyword)), [keyword, tags])
   const hasAnyTagsSelected = useMemo(() => tags?.some(tag => tag.selected) ?? false, [tags])
 
-  console.log('should be hidden', !hasAnyTagsSelected)
 
   const filterByTag = (tag: string) => dispatcher(Actions.filterByTag(tag))
   const resetFilters = () => dispatcher(Actions.resetFilters())

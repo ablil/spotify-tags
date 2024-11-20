@@ -1,6 +1,3 @@
-import dataclasses
-import json
-
 import boto3
 import spotipy
 from aws_lambda_powertools import Metrics
@@ -41,7 +38,7 @@ def hello():
 def healthcheck():
     return "UP"
 
-@app.get("/tracks")
+@app.get("/tracks", cache_control="max-age=3600")
 def get_all_tracks():
     return tagger.fetch_all()
 

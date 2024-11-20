@@ -1,10 +1,9 @@
 "use client";
 import { Actions, loadAllTracksAction, useAppDispatch } from "@/lib/store";
+import { SortBy, SortDirection } from "@/lib/types";
 import { useEffect } from "react";
-import AudioPlayer from "./player/AudioPlayer";
 import TracksTable from "./tracks/TracksTable";
 import TrackSearchInput from "./TrackSearchInput";
-import { SortBy, SortDirection } from "@/lib/types";
 
 const TrackList = () => {
   const dispatcher = useAppDispatch();
