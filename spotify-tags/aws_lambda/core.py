@@ -29,10 +29,9 @@ class SpotifyTagger:
         track = self.spotify_client.track(data.spotify_track)
         logger.debug("track metadata", track)
 
-        # TODO: convert all tags to lowercase and remove duplicated
         result = self.table.put_item(Item={
             'id': track['id'],
-            'tags': data.labels,
+            'tags': set(map(lambda item: item.lower(), data.labels)),
             'metadata': track,
             'last_updated': int(datetime.datetime.now().timestamp()),
         })
@@ -44,7 +43,7 @@ class SpotifyTagger:
         items = self.table.scan()['Items']
         for item in items:
             # set data type is not serializable by json library
-            item['tags'] = [tag for tag in item['tags']]
+            item['tags'] = [tag.lower() for tag in item['tags']]
         return items
 
     def delete_track(self, id: str):
