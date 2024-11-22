@@ -18,10 +18,17 @@ function* loadAllTracks() {
 function* updateTags({ payload: tag }: PayloadAction<string>) {
   try {
     const track: Track = yield select((state) => state.modal.track);
-
     const updatedTags = track.tags?.includes(tag) ? track.tags.filter((t) => !eq(tag, t)) : track.tags.concat(tag);
-    const updatedTrack: Track = yield call(patchTrack, track.id, updatedTags);
-    yield put(Actions.trackUpdated(updatedTrack));
+
+    if (updatedTags.length > 0 ) {
+      const updatedTrack: Track = yield call(patchTrack, track.id, updatedTags);
+      yield put(Actions.trackUpdated(updatedTrack));
+    } else {
+      // delete track since it has no more tags
+      yield call(deleteTrack, track.id)
+      yield put(Actions.trackDeleted(track.id))
+      yield put(Actions.closeModal())
+    }
   } catch (err: unknown) {
     console.error(err);
     alert("failed to updated tags, try again !");
