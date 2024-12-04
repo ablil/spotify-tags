@@ -17,7 +17,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Spotify tags",
   description: "Spotify tags",
-  robots: "noindex, nofollow"
+  robots: "noindex, nofollow",
 };
 
 export default function RootLayout({

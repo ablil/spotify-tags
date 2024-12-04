@@ -25,7 +25,6 @@ export function findIndexCasesInsensitive(array: Array<string>, str: string): nu
   return array.findIndex((item) => item.toLowerCase() === str.toLowerCase());
 }
 
-
 export function allOf<T>(...predicates: Predicate<T>[]): Predicate<T> {
   return (value: T) => predicates.every((predicate) => predicate(value));
 }
