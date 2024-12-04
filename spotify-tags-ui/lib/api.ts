@@ -1,16 +1,24 @@
 import axios from "axios";
 import { Track } from "./types";
 
-export async function fetchAllTracks(): Promise<Array<Track>> {
-  const response = await axios.get<Array<Track>>("/api/tracks");
-  return response.data;
+export interface SpotifyAPI {
+  fetchAllTracks: () => Promise<Array<Track>>;
+  patchTrack: (trackId: string, tags: Array<string>) => Promise<Track>;
+  deleteTrack: (trackId: string) => Promise<void>;
 }
 
-export async function patchTrack(trackId: string, tags: Array<string>): Promise<Track> {
-  const response = await axios.patch<Track>("/api/tracks/" + trackId, { tags });
-  return response.data;
-}
-
-export async function deleteTrack(trackId: string): Promise<void> {
-  await axios.delete<void>("/api/tracks/" + trackId);
+export function createSpotifyAPI(): SpotifyAPI {
+  return {
+    fetchAllTracks: async () => {
+      const response = await axios.get<Array<Track>>("/api/tracks");
+      return response.data;
+    },
+    patchTrack: async (trackId, tags) => {
+      const response = await axios.patch<Track>("/api/tracks/" + trackId, { tags });
+      return response.data;
+    },
+    deleteTrack: async (trackId) => {
+      await axios.delete<void>("/api/tracks/" + trackId);
+    },
+  };
 }
