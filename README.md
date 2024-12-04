@@ -13,3 +13,19 @@ It allows me to:
 
 
 **I have also setup an IOS shortcut on my mobile which prompt me to type some tags then it's picks up my spotify tracks and call my backend to save them.**
+
+## Components overview
+
+TODO: add a diagram here to describe how frontend interact with backend and how mobile is involved
+
+## Deploy your own version
+
+TODO: step by step guide to deploy your own version of the entire app
+
+
+## Setup an IOS shortcut
+
+TODO: step by step guide to create an ios shortcut
+TODO: publish shareblae shortcut link
+
+
