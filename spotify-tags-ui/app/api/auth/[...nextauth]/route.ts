@@ -11,7 +11,8 @@ const handler = NextAuth({
       async authorize(credentials, _): Promise<any> {
         if (credentials?.password ===process.env.PASSWORD) {
           return {
-            username: "admin",
+            name: 'admin',
+            email: 'admin@example.com'
           }
         }
         return null
