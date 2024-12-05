@@ -13,6 +13,7 @@ import {
 } from "./utils";
 
 type SliceState = {
+  previewMode: boolean;
   _tracks?: Array<Track>;
   _tags?: Array<string>;
   status: AppStatus;
@@ -34,7 +35,7 @@ enum AppStatus {
   error,
 }
 
-export const loadAllTracksAction = createAction("api/tracks/load_all");
+export const loadAllTracksAction = createAction<boolean>("api/tracks/load_all");
 export const deleteTrackAction = createAction<string>("api/tracks/delete");
 export const updateTrackTagsActions = createAction<string>("api/tracks/update_tags");
 
@@ -47,6 +48,7 @@ const defaultFilters: TracksFilter = {
 };
 
 const initialSlice: SliceState = {
+  previewMode: true,
   filters: defaultFilters,
   status: AppStatus.idle,
   modal: {
@@ -61,6 +63,9 @@ const slice = createSlice({
   name: "default",
   initialState: initialSlice,
   reducers: {
+    setPreviewMode: (state, action: PayloadAction<boolean>) => {
+      state.previewMode = action.payload;
+    },
     tracksLoadedSuccessfully: (state, action: PayloadAction<Array<Track>>) => {
       state.status = AppStatus.done;
       state._tracks = action.payload;
@@ -159,3 +164,5 @@ export const modalTagsSelector = createSelector(
   (tags, track) =>
     tags && track ? tags.map((item) => ({ tag: item, selected: includesIgnoreCase(track.tags, item) ?? false })) : [],
 );
+
+export const isPreviewModeSelector = (state: RootState) => state.previewMode;
