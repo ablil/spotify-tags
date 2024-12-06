@@ -11,6 +11,7 @@ import {
 import { Track } from "./types";
 import { eq } from "./utils";
 import { previewData } from "./preview";
+import { toast } from "react-toastify";
 
 const spotifyApi: SpotifyAPI = createSpotifyAPI();
 
@@ -18,10 +19,11 @@ function* loadAllTracks(action: PayloadAction<boolean>) {
   try {
     const isPreviewMode = action.payload;
     yield put(Actions.setPreviewMode(isPreviewMode));
-    const tracks: Array<Track> = isPreviewMode ? previewData : yield call(spotifyApi.fetchAllTracks)
+    const tracks: Array<Track> = isPreviewMode ? previewData : yield call(spotifyApi.fetchAllTracks);
     yield put(Actions.tracksLoadedSuccessfully(tracks));
   } catch (err: unknown) {
     console.error(err);
+    toast.error("failed to load tracks");
     yield put(Actions.fetchAllTracksFailure());
   }
 }
@@ -44,7 +46,7 @@ function* updateTags({ payload: tag }: PayloadAction<string>) {
     }
   } catch (err: unknown) {
     console.error(err);
-    alert("failed to updated tags, try again !");
+    toast.error("failed to update tag, try again");
   }
 }
 
@@ -57,7 +59,7 @@ function* deleteTrackWorker(action: PayloadAction<string>) {
     yield put(Actions.trackDeleted(action.payload));
   } catch (err: unknown) {
     console.error(err);
-    alert("failed to updated tags, try again !");
+    toast.error("failed to update tags, try again !");
   }
 }
 
