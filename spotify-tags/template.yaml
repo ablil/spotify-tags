@@ -16,6 +16,9 @@ Resources:
   Database:
     Type: AWS::Serverless::SimpleTable
     Properties:
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
       TableName: spotify-tags
   HelloWorldFunction:
     Type: AWS::Serverless::Function     # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
