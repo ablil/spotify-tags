@@ -1,0 +1,69 @@
+name: default workflow
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build & test SAM application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - run: sam build --use-container -s spotify-tags -t spotify-tags/template.yaml
+      - run: sam validate -t spotify-tags/template.yaml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sam-build
+          path: |
+            '${{ github.WORKSPACE }}.aws-sam/'
+            spotify-tags/samconfig.toml
+            spotify-tags/template.yaml
+
+  deploy-sam:
+    name: Deploy SAM application
+    if: ${{ github.ref == 'refs/heads/main' }} 
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: sam-build
+          path: '${{ github.workspace }}'
+      # Prevent prompts and failure when the stack is unchanged
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --config-file samconfig.toml --force-upload -t spotify-tags/template.yaml
+
+      
+  
+  build-front:
+    name: Build NextJS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: yarn --cwd spotify-tags-ui/ install
+      - run: yarn --cwd spotify-tags-ui/ build
