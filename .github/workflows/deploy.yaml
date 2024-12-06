@@ -53,7 +53,10 @@ jobs:
           name: sam-build
           path: '${{ github.workspace }}'
       # Prevent prompts and failure when the stack is unchanged
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --config-file samconfig.toml --force-upload -t spotify-tags/template.yaml
+      - run: |
+          sam build -t spotify-tags/template.yaml --use-container
+          sam validate -t spotify-tags/template.yaml
+          sam deploy --config-file spotify-tags/samconfig.toml --no-fail-on-empty-changeset --no-confirm-changeset
 
       
   
