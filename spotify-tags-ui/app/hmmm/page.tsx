@@ -8,20 +8,15 @@ const Page = () => {
   const [password, setPassword] = useState("")
   const [failed, setFailed] = useState(false)
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (evt) => { 
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (evt) => { 
     evt.preventDefault()
+    setFailed(false)
 
-    const response = await signIn('credentials', {
+    signIn('credentials', {
       callbackUrl: '/',
       redirect: false,
       password: password
-    })
-
-    if (response?.ok) {
-      router.push('/')
-    } else {
-      setFailed(true)
-    }
+    }).then(response => response?.ok ? router.push('/') : setFailed(true))
   }
 
   return (
