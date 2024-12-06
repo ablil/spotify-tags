@@ -16,16 +16,5 @@ It allows me to:
 
 ## Components overview
 
-TODO: add a diagram here to describe how frontend interact with backend and how mobile is involved
-
-## Deploy your own version
-
-TODO: step by step guide to deploy your own version of the entire app
-
-
-## Setup an IOS shortcut
-
-TODO: step by step guide to create an ios shortcut
-TODO: publish shareblae shortcut link
-
+[overview](docs/spotify-tags.svg)
 
