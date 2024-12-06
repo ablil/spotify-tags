@@ -22,18 +22,6 @@ spotify_client = spotipy.Spotify(auth_manager=SpotifyClientCredentials())
 
 tagger = SpotifyTagger(dynamodb_table, spotify_client)
 
-@app.get("/hello")
-@tracer.capture_method
-def hello():
-    # adding custom metrics
-    # See: https://awslabs.github.io/aws-lambda-powertools-python/latest/core/metrics/
-    metrics.add_metric(name="HelloWorldInvocations", unit=MetricUnit.Count, value=1)
-
-    # structured log
-    # See: https://awslabs.github.io/aws-lambda-powertools-python/latest/core/logger/
-    logger.info("Hello world API - HTTP 200")
-    return {"message": "hello world"}
-
 @app.get("/")
 def healthcheck():
     return "UP"

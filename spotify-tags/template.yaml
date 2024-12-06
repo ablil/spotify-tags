@@ -33,11 +33,6 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref Database
       Events:
-        HelloPath:
-          Type: Api           # More info about API Event Source: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-api.html
-          Properties:
-            Path: /hello
-            Method: GET
         HealthCheck:
           Type: Api           # More info about API Event Source: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-api.html
           Properties:
@@ -98,7 +93,7 @@ Resources:
 Outputs:
   HelloWorldApi:
     Description: API Gateway endpoint URL for Prod environment for Hello World Function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
 
   HelloWorldFunction:
     Description: Hello World Lambda Function ARN
