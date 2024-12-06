@@ -16,5 +16,5 @@ It allows me to:
 
 ## Components overview
 
-[overview](docs/spotify-tags.svg)
+![overview](docs/spotify-tags.svg)
 
