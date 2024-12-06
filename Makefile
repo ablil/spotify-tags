@@ -9,9 +9,9 @@ ifndef VERCEL_TOKEN
 endif
 
 deploy-backend:
-	sam build -s spotify-tags -t spotify-tags/template.yaml
+	sam build -t spotify-tags/template.yaml
 	sam validate -t spotify-tags/template.yaml
-	sam deploy --config-file samconfig.toml --force-upload -t spotify-tags/template.yaml --no-fail-on-empty-changeset
+	sam deploy --config-file spotify-tags/samconfig.toml --force-upload --no-fail-on-empty-changeset
 
 vercel-build:
 	vercel build

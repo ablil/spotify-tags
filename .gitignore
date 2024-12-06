@@ -2,3 +2,4 @@
 node_modules/
 **/*/.todo
 .aws-sam
+.env*.local
