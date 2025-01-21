@@ -1,6 +1,7 @@
 import { isPreviewModeSelector } from "@/lib/store";
 import Logo from "@/svgs/Logo";
 import { useSelector } from "react-redux";
+import SignOutFromSpotify from "./SignOutFromSpotify";
 
 const Header = () => {
   const isPreviewMode = useSelector(isPreviewModeSelector);
@@ -15,6 +16,9 @@ const Header = () => {
             preview mode
           </div>
         )}
+        <div className="absolute right-12">
+          <SignOutFromSpotify />
+        </div>
       </div>
     </article>
   );
