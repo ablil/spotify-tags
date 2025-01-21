@@ -1,18 +1,20 @@
 "use client";
 import { Actions, loadAllTracksAction, useAppDispatch } from "@/lib/store";
 import { SortBy, SortDirection } from "@/lib/types";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 import TracksTable from "./tracks/TracksTable";
 import TrackSearchInput from "./TrackSearchInput";
 
-const TrackList = () => {
+type Props = {
+  isPreviewMode: boolean;
+};
+
+const TrackList: FC<Props> = ({ isPreviewMode }) => {
   const dispatcher = useAppDispatch();
-  const { status } = useSession();
 
   useEffect(() => {
-    dispatcher(loadAllTracksAction(status !== "authenticated"));
-  }, [status]);
+    dispatcher(loadAllTracksAction(isPreviewMode));
+  }, []);
 
   return (
     <div className="bg-zinc-900 p-4 md:m-4 rounded-md">

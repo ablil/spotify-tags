@@ -20,7 +20,7 @@ export default function Home() {
                 <TagsFilters />
               </div>
               <div className="w-4/5">
-                <TrackList />
+                <TrackList isPreviewMode={false} />
               </div>
             </div>
           </main>

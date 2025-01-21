@@ -11,14 +11,14 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Home() {
-  const {status} = useSession()
-  const router = useRouter()
+  const { status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      router.replace('/')
+    if (status === "authenticated") {
+      router.replace("/");
     }
-  }, [status])
+  }, [status]);
 
   return (
     <SessionProvider>
@@ -31,7 +31,7 @@ export default function Home() {
                 <TagsFilters />
               </div>
               <div className="w-4/5">
-                <TrackList />
+                <TrackList isPreviewMode={true} />
               </div>
             </div>
           </main>
