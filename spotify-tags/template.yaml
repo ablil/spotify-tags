@@ -77,6 +77,29 @@ Resources:
       Tags:
         LambdaPowertools: python
 
+  PrototypeApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: Spotify tags API
+      StageName: default
+      OpenApiVersion: '3.0.0'
+      EndpointConfiguration:
+        Type: EDGE
+      DefinitionBody:
+        'Fn::Transform':
+          Name: 'AWS::Include'
+          Parameters:
+            Location: oas.yaml
+
+  # grant permission to API gateway to invoke lambda function
+  LambdaInvokerPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt HelloWorldFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${PrototypeApi}/*/*/*"
+
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
@@ -98,4 +121,8 @@ Outputs:
   HelloWorldFunction:
     Description: Hello World Lambda Function ARN
     Value: !GetAtt HelloWorldFunction.Arn
+
+  ApiGatewayUrl:
+    Description: API Gateway public URL
+    Value: !Sub "https://${PrototypeApi}.execute-api.${AWS::Region}.amazonaws.com/default/"
 
