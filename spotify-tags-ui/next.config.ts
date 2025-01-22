@@ -5,14 +5,14 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/tracks',
-        destination: `https://${process.env.NEXT_PUBLIC_API}/Prod/tracks`
+        source: "/api/tracks",
+        destination: `https://${process.env.NEXT_PUBLIC_API}/default/tracks`,
       },
       {
-        source: '/api/tracks/:path',
-        destination: `https://${process.env.NEXT_PUBLIC_API}/Prod/tracks/:path`
+        source: "/api/tracks/:path",
+        destination: `https://${process.env.NEXT_PUBLIC_API}/default/tracks/:path`,
       },
-    ]
+    ];
   },
 };
 
