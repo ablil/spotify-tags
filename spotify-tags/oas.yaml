@@ -1,0 +1,139 @@
+openapi: 3.0.0
+info:
+  title: Spotify tags
+  description: Spotify tags and playlists manager
+  version: 1.0.0
+servers:
+  - url: /
+paths:
+  /:
+    get:
+      summary: health check
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        type: aws_proxy
+        uri: arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:462555053910:function:spotify-tags-HelloWorldFunction-8gA0Ab0oyhlm/invocations
+        responses:
+          default:
+            statusCode: 200
+      responses:
+        200:
+          description: service is up
+          content:
+            application/text:
+              schema:
+                type: string
+              example: 'UP'
+  /tracks:
+    get:
+      summary: get all tracks
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        type: aws_proxy
+        uri: arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:462555053910:function:spotify-tags-HelloWorldFunction-8gA0Ab0oyhlm/invocations
+        responses:
+          default:
+            statusCode: 200
+      responses:
+        200:
+          description: list of tracks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Track'
+  /tracks/{id}:
+    delete:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          description: track id
+          required: true
+      summary: delete track
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        type: aws_proxy
+        uri: arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:462555053910:function:spotify-tags-HelloWorldFunction-8gA0Ab0oyhlm/invocations
+        responses:
+          default:
+            statusCode: 201
+      responses:
+        201:
+          description: track deleted successfully
+    patch:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          description: track id
+          required: true
+      summary: update track tags
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        type: aws_proxy
+        uri: arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:462555053910:function:spotify-tags-HelloWorldFunction-8gA0Ab0oyhlm/invocations
+        responses:
+          default:
+            statusCode: 200
+      responses:
+        200:
+          description: track tag updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Track'
+  /label-track:
+    post:
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        type: aws_proxy
+        uri: arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:462555053910:function:spotify-tags-HelloWorldFunction-8gA0Ab0oyhlm/invocations
+        responses:
+          default:
+            statusCode: 200
+      summary: tag spotify track
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagRequest'
+      responses:
+        200:
+          description: track tagged successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'SUCCESS'
+                default: 'SUCCESS'
+
+
+components:
+  schemas:
+    Track:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ''
+        tags:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+    TagRequest:
+      type: object
+      properties:
+        track:
+          type: string
+          example: 'https://open.spotify.com/track/2KVb1qFVI8n9VuCucFS56k'
+        labels:
+          type: array
+          items:
+            type: string
+            example: 'first second third'
