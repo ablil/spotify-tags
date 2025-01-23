@@ -1,0 +1,28 @@
+name: scheduled backup
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  backup:
+    environment:
+      name: latest scheduled backup
+      url: ${{ steps.upload.outputs.artifact-url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: backup
+        run: aws dynamodb scan --table-name 'spotify-tags' --output json > scan_result.json
+      - uses: actions/upload-artifact@v4.6.0
+        id: upload
+        with:
+          path: scan_result.json
+          retention-days: 7
+
+
