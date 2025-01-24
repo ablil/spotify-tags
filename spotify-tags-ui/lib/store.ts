@@ -2,7 +2,7 @@ import { configureStore, createAction, createSelector, createSlice, PayloadActio
 import { useDispatch, useSelector } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 import { allSagas } from "./sagas";
-import { Operator, SortBy, SortDirection, Track, TracksFilter } from "./types";
+import { Operator, SortBy, SortDirection, TagWrapper, Track, TracksFilter } from "./types";
 import {
   extractAndSortAllTags,
   filterAllTracks,
@@ -38,6 +38,7 @@ enum AppStatus {
 export const loadAllTracksAction = createAction<boolean>("api/tracks/load_all");
 export const deleteTrackAction = createAction<string>("api/tracks/delete");
 export const updateTrackTagsActions = createAction<string>("api/tracks/update_tags");
+export const createPlaylistAction = createAction<string>("api/playlists/create_private");
 
 const defaultFilters: TracksFilter = {
   tags: [],
@@ -166,3 +167,8 @@ export const modalTagsSelector = createSelector(
 );
 
 export const isPreviewModeSelector = (state: RootState) => state.previewMode;
+
+export const hasAnyTagSelectedSelector = createSelector(
+  [filterTagsSelector],
+  (tags: TagWrapper[]) => tags.some((tag) => tag.selected) ?? false,
+);

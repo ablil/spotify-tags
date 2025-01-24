@@ -1,10 +1,22 @@
 import axios from "axios";
 import { Track } from "./types";
 
+axios.interceptors.request.use(
+  (config) => {
+    const token = sessionStorage.getItem("token");
+    if (token != null) {
+      config.headers = { ...config.headers, "x-spotify-access-token": token };
+    }
+    console.warn("token is NOT set on sessionStorage");
+    return config;
+  },
+  (err) => Promise.reject(err),
+);
 export interface SpotifyAPI {
   fetchAllTracks: () => Promise<Array<Track>>;
   patchTrack: (trackId: string, tags: Array<string>) => Promise<Track>;
   deleteTrack: (trackId: string) => Promise<void>;
+  createPlaylist: (tracks: string[], tags: string[]) => Promise<unknown>;
 }
 
 export function createSpotifyAPI(): SpotifyAPI {
@@ -19,6 +31,10 @@ export function createSpotifyAPI(): SpotifyAPI {
     },
     deleteTrack: async (trackId) => {
       await axios.delete<void>("/api/tracks/" + trackId);
+    },
+    createPlaylist: async (tracks, tags) => {
+      const response = await axios.post<unknown>("/api/playlists", { tracks, tags });
+      return response.data;
     },
   };
 }

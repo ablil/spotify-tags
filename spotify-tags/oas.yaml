@@ -110,9 +110,48 @@ paths:
                 type: string
                 example: 'SUCCESS'
                 default: 'SUCCESS'
-
+  /playlists:
+    post:
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        type: aws_proxy
+        uri: arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:462555053910:function:spotify-tags-HelloWorldFunction-8gA0Ab0oyhlm/invocations
+        responses:
+          default:
+            statusCode: 200
+      summary: create private playlist
+      security:
+        - SpotifyAccessToken: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tags:
+                  type: array
+                  items:
+                    type: string
+                    example: 'abcderfg'
+                tracks:
+                  type: array
+                  items:
+                    type: string
+                    example: 'https://open.spotify.com/track/2KVb1qFVI8n9VuCucFS56k'
+      responses:
+        201:
+          description: playlist created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playlist'
 
 components:
+  securitySchemes:
+    SpotifyAccessToken:
+      type: apiKey
+      in: header
+      name: x-spotify-access-token
   schemas:
     Track:
       type: object
@@ -137,3 +176,18 @@ components:
           items:
             type: string
             example: 'first second third'
+    Playlist:
+        type: object
+        required:
+          - id
+          - external_urls
+        properties:
+          description:
+            type: string
+          external_urls:
+            type: object
+            properties:
+              spotify:
+                  type: string
+          id:
+            type: string

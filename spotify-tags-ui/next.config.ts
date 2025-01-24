@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         source: "/api/tracks/:path",
         destination: `https://${process.env.NEXT_PUBLIC_API}/default/tracks/:path`,
       },
+      {
+        source: "/api/playlists",
+        destination: `https://${process.env.NEXT_PUBLIC_API}/default/playlists`,
+      },
     ];
   },
 };

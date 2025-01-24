@@ -1,13 +1,16 @@
+import os
+from http import HTTPStatus
+
 import boto3
 import spotipy
 from aws_lambda_powertools import Metrics
 from aws_lambda_powertools import Tracer
-from aws_lambda_powertools.event_handler import APIGatewayRestResolver
+from aws_lambda_powertools.event_handler import APIGatewayRestResolver, Response
 from aws_lambda_powertools.logging import correlation_paths
-from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from spotipy import SpotifyClientCredentials
 
+from aws_lambda.client import create_private_playlist, handle_spotify_exception
 from aws_lambda.core import SpotifyTagger, SpotifyLabel
 from aws_lambda.logger import logger
 
@@ -55,6 +58,19 @@ def label_track():
     )
     tagger.save_spotify_labels(labels)
     return "SUCCESS"
+
+@app.post("/playlists")
+def create_playlist():
+    logger.info("got request to create playlist")
+    try:
+        request_body: dict = app.current_event.json_body
+        access_token = app.current_event.headers.get('x-spotify-access-token')
+        playlist = create_private_playlist(request_body['tags'], request_body['tracks'], access_token)
+        return playlist
+    except spotipy.SpotifyException as e:
+        return handle_spotify_exception(e)
+    except AssertionError|KeyError as e:
+        return Response(status_code=HTTPStatus.BAD_REQUEST.value, body={"error", str(e)})
 
 # Enrich logging with contextual information from Lambda
 @logger.inject_lambda_context(correlation_id_path=correlation_paths.API_GATEWAY_REST)
