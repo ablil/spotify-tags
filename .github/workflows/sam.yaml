@@ -7,7 +7,17 @@ on:
       - main
 
 jobs:
+  oas:
+    name: validate oas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: validate oas
+        uses: thiyagu06/openapi-validator-action@v1
+        with:
+          filepath: 'spotify-tags/oas.yaml'
   build:
+    needs: [oas]
     name: Build & test SAM application
     runs-on: ubuntu-latest
     steps:
