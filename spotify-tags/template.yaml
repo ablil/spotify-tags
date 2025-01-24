@@ -2,6 +2,10 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: spotify-tags
 
+Parameters:
+  ServiceName:
+    Type: String
+    Default: spotify-tags
 
 Globals: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy-globals.html
   Function:
@@ -16,13 +20,12 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      TableName: spotify-tags
+      TableName: !Ref ServiceName
   HelloWorldFunction:
     Type: AWS::Serverless::Function     # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
     Properties:
       CodeUri: .
       Handler: aws_lambda.app.lambda_handler
-      Description: Hello World function
       Architectures:
       - x86_64
       Tracing: Active
@@ -45,7 +48,7 @@ Resources:
   PrototypeApi:
     Type: AWS::Serverless::Api
     Properties:
-      Name: Spotify tags API
+      Name: !Ref ServiceName
       StageName: default
       OpenApiVersion: '3.0.0'
       EndpointConfiguration:
@@ -80,7 +83,7 @@ Resources:
       AutoConfigurationEnabled: 'true'
 Outputs:
   HelloWorldFunction:
-    Description: Hello World Lambda Function ARN
+    Description: Lambda Function ARN
     Value: !GetAtt HelloWorldFunction.Arn
 
   ApiGatewayUrl:
