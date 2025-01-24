@@ -9,9 +9,6 @@ Globals: # https://docs.aws.amazon.com/serverless-application-model/latest/devel
     MemorySize: 128
     Runtime: python3.12
 
-    # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
-    LoggingConfig:
-      LogFormat: JSON
 Resources:
   Database:
     Type: AWS::Serverless::SimpleTable
@@ -32,39 +29,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref Database
-      Events:
-        HealthCheck:
-          Type: Api           # More info about API Event Source: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-api.html
-          Properties:
-            Path: /
-            Method: GET
-        SpotifyLabel:
-          Type: Api           # More info about API Event Source: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-api.html
-          Properties:
-            Path: /label-track
-            Method: POST
-        AllData:
-          Type: Api           # More info about API Event Source: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-api.html
-          Properties:
-            Path: /tracks
-            Method: GET
-        DeleteTrack:
-          Type: Api           # More info about API Event Source: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-api.html
-          Properties:
-            Path: /tracks/{id}
-            Method: DELETE
-            RequestParameters:
-              - method.request.path.id:
-                  Required: true
-        PatchTrack:
-          Type: Api           # More info about API Event Source: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-api.html
-          Properties:
-            Path: /tracks/{id}
-            Method: PATCH
-            RequestParameters:
-              - method.request.path.id:
-                  Required: true
-             # Powertools env vars: https://awslabs.github.io/aws-lambda-powertools-python/#environment-variables
+       # Powertools env vars: https://awslabs.github.io/aws-lambda-powertools-python/#environment-variables
       Environment:
         Variables:
           TABLE_NAME: !Ref Database
@@ -114,10 +79,6 @@ Resources:
         Ref: ApplicationResourceGroup
       AutoConfigurationEnabled: 'true'
 Outputs:
-  HelloWorldApi:
-    Description: API Gateway endpoint URL for Prod environment for Hello World Function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
-
   HelloWorldFunction:
     Description: Hello World Lambda Function ARN
     Value: !GetAtt HelloWorldFunction.Arn
