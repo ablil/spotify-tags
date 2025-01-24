@@ -1,5 +1,5 @@
 {
-    "body":"",
+    "body":"{\"tags\": [ \"foo\", \"something\"]}",
     "headers":{
        "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
        "Accept-Encoding":"gzip, deflate, br",
@@ -19,7 +19,7 @@
        "X-Forwarded-Port":"3000",
        "X-Forwarded-Proto":"http"
     },
-    "httpMethod":"GET",
+    "httpMethod":"PATCH",
     "isBase64Encoded": false,
     "multiValueHeaders":{
        "Accept":[
@@ -75,7 +75,7 @@
        ]
     },
     "multiValueQueryStringParameters":"",
-    "path":"/",
+    "path":"/tracks/1exZP2NFe3dCHcocPkXlhQ",
     "pathParameters":"",
     "queryStringParameters":"",
     "requestContext":{
@@ -96,16 +96,16 @@
           "userAgent":"Custom User Agent String",
           "userArn":""
        },
-       "path":"/",
+       "path":"/tracks/1exZP2NFe3dCHcocPkXlhQ",
        "protocol":"HTTP/1.1",
        "requestId":"a3590457-cac2-4f10-8fc9-e47114bf7c62",
        "requestTime":"02/Feb/2023:11:45:26 +0000",
        "requestTimeEpoch":1675338326,
        "resourceId":"123456",
-       "resourcePath":"/",
-       "stage":"Prod"
+       "resourcePath":"/hello",
+       "stage":"default"
     },
-    "resource":"/",
+    "resource":"/tracks/{id}",
     "stageVariables":"",
     "version":"1.0"
  }
