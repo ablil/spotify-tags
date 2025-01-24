@@ -75,7 +75,7 @@
        ]
     },
     "multiValueQueryStringParameters":"",
-    "path":"/label-track",
+    "path":"/playlists",
     "pathParameters":"",
     "queryStringParameters":"",
     "requestContext":{
@@ -96,7 +96,7 @@
           "userAgent":"Custom User Agent String",
           "userArn":""
        },
-       "path":"/label-track",
+       "path":"/playlists",
        "protocol":"HTTP/1.1",
        "requestId":"a3590457-cac2-4f10-8fc9-e47114bf7c62",
        "requestTime":"02/Feb/2023:11:45:26 +0000",
@@ -105,7 +105,7 @@
        "resourcePath":"/hello",
        "stage":"Prod"
     },
-    "resource":"/label-track",
+    "resource":"/playlists",
     "stageVariables":"",
     "version":"1.0"
  }

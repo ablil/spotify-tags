@@ -20,6 +20,9 @@
   button {
     /* @apply duration-300; */
   }
+  button.btn {
+    @apply bg-white font-bold px-4 rounded-full text-black hover:opacity-70 duration-300;
+  }
 }
 
 @layer utilities {

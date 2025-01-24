@@ -2,11 +2,12 @@ import { signOut } from "next-auth/react";
 import React from "react";
 
 const SignOutFromSpotify = () => {
+  const handleSignout = () => {
+    signOut({ callbackUrl: "/signin" });
+    sessionStorage.removeItem("token");
+  };
   return (
-    <button
-      className="bg-white font-bold px-4 rounded-full text-black hover:opacity-70 duration-300"
-      onClick={() => signOut({ callbackUrl: "/signin" })}
-    >
+    <button className="btn" onClick={handleSignout}>
       sign out
     </button>
   );

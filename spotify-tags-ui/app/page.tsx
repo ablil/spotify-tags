@@ -1,5 +1,6 @@
 /* eslint-disable */
 "use client";
+import AuthWrapper from "@/components/AuthWrapper";
 import Header from "@/components/Header";
 import TrackList from "@/components/MainWrapper";
 import AudioPlayer from "@/components/player/AudioPlayer";
@@ -13,17 +14,19 @@ export default function Home() {
     <SessionProvider>
       <StoreProvider>
         <ModalsProvider>
-          <main>
-            <Header />
-            <div className="flex">
-              <div className="w-1/5">
-                <TagsFilters />
+          <AuthWrapper>
+            <main>
+              <Header />
+              <div className="flex">
+                <div className="w-1/5">
+                  <TagsFilters />
+                </div>
+                <div className="w-4/5">
+                  <TrackList isPreviewMode={false} />
+                </div>
               </div>
-              <div className="w-4/5">
-                <TrackList isPreviewMode={false} />
-              </div>
-            </div>
-          </main>
+            </main>
+          </AuthWrapper>
           <AudioPlayer />
         </ModalsProvider>
       </StoreProvider>

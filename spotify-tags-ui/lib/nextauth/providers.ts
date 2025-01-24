@@ -6,7 +6,7 @@ export const spotifyProvider = SpotifyProvider({
   clientSecret: process.env.SPOTIFY_CLIENT_SECRET!,
   authorization: {
     params: {
-      scope: "user-read-email user-read-currently-playing",
+      scope: "user-read-email user-read-currently-playing playlist-modify-private",
     },
   },
 });

@@ -3,12 +3,15 @@ import { call, put, select, takeLatest } from "redux-saga/effects";
 import { createSpotifyAPI, SpotifyAPI } from "./api";
 import {
   Actions,
+  createPlaylistAction,
   deleteTrackAction,
+  filteredTracksSelector,
+  filterTagsSelector,
   isPreviewModeSelector,
   loadAllTracksAction,
   updateTrackTagsActions,
 } from "./store";
-import { Track } from "./types";
+import { TagWrapper, Track } from "./types";
 import { eq } from "./utils";
 import { previewData } from "./preview";
 import { toast } from "react-toastify";
@@ -63,8 +66,26 @@ function* deleteTrackWorker(action: PayloadAction<string>) {
   }
 }
 
+function* createPlaylistWorker() {
+  const tags: TagWrapper[] = yield select(filterTagsSelector);
+  const tracks: Track[] = yield select(filteredTracksSelector);
+  yield call(
+    toast.promise,
+    spotifyApi.createPlaylist(
+      tracks.map((track) => track.metadata.external_urls.spotify),
+      tags.filter((tag) => tag.selected).map((tag) => tag.tag),
+    ),
+    {
+      pending: "creating playlist ...",
+      success: "playlist created, check your Spotify app",
+      error: "failed to create playlist, try again !!",
+    },
+  );
+}
+
 export function* allSagas() {
   yield takeLatest(loadAllTracksAction.type, loadAllTracks);
   yield takeLatest(deleteTrackAction.type, deleteTrackWorker);
   yield takeLatest(updateTrackTagsActions.type, updateTags);
+  yield takeLatest(createPlaylistAction.type, createPlaylistWorker);
 }

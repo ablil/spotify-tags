@@ -1,9 +1,16 @@
 "use client";
-import { Actions, loadAllTracksAction, useAppDispatch } from "@/lib/store";
+import {
+  Actions,
+  createPlaylistAction,
+  hasAnyTagSelectedSelector,
+  loadAllTracksAction,
+  useAppDispatch,
+} from "@/lib/store";
 import { SortBy, SortDirection } from "@/lib/types";
 import { FC, useEffect } from "react";
 import TracksTable from "./tracks/TracksTable";
 import TrackSearchInput from "./TrackSearchInput";
+import { useSelector } from "react-redux";
 
 type Props = {
   isPreviewMode: boolean;
@@ -11,6 +18,7 @@ type Props = {
 
 const TrackList: FC<Props> = ({ isPreviewMode }) => {
   const dispatcher = useAppDispatch();
+  const hasAnyTagsSelected = useSelector(hasAnyTagSelectedSelector);
 
   useEffect(() => {
     dispatcher(loadAllTracksAction(isPreviewMode));
@@ -20,6 +28,14 @@ const TrackList: FC<Props> = ({ isPreviewMode }) => {
     <div className="bg-zinc-900 p-4 md:m-4 rounded-md">
       <header className="flex items-center">
         <h1 className="text-white capitlize mb-4 mr-auto">Tracks</h1>
+        <button
+          className="btn"
+          title="create playlist with all filtered tracks"
+          onClick={() => dispatcher(createPlaylistAction("someting"))}
+          hidden={!hasAnyTagsSelected}
+        >
+          create playlist
+        </button>
         <TrackSearchInput className="mx-2" />
         <select
           name="sort"
