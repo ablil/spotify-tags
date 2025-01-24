@@ -1,5 +1,5 @@
 {
-    "body":"{\"tags\": [ \"foo\", \"something\"]}",
+    "body":"{\"tracks\": [\"https://open.spotify.com/track/4frYK9dzMQ4AQdOOvopI3d?si=6929afd2a18644f3\"], \"tags\": [\"foo\"]}",
     "headers":{
        "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
        "Accept-Encoding":"gzip, deflate, br",
@@ -17,9 +17,10 @@
        "Upgrade-Insecure-Requests":"1",
        "User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
        "X-Forwarded-Port":"3000",
-       "X-Forwarded-Proto":"http"
+       "X-Forwarded-Proto":"http",
+       "x-spotify-access-token": "BQD24qpHOb4KfMkkA5s7UEOGlmDLQq5Okftl2oelcDetBTagxUOvoA9f_E9hVnxh54U0rr3zn4-82dvkZCq9a1cJQ4WtHl4Ava3Rcw6xBZMsAl0iHwfjCiR5yQQiUkIksX0mtQEZCOmjoDDEX1ASBIjoHnFMr0e6-N-iaNXUspyGm-DnNRF--euVZzASNmtMSV-6lFETTjRLLdcxv3hVdOhKHxkAvnF-5aSpqHky7AwW96OlcXId"
     },
-    "httpMethod":"PATCH",
+    "httpMethod":"POST",
     "isBase64Encoded": false,
     "multiValueHeaders":{
        "Accept":[
@@ -75,7 +76,7 @@
        ]
     },
     "multiValueQueryStringParameters":"",
-    "path":"/tracks/1exZP2NFe3dCHcocPkXlhQ",
+    "path":"/playlists",
     "pathParameters":"",
     "queryStringParameters":"",
     "requestContext":{
@@ -96,16 +97,16 @@
           "userAgent":"Custom User Agent String",
           "userArn":""
        },
-       "path":"/tracks/1exZP2NFe3dCHcocPkXlhQ",
+       "path":"/playlists",
        "protocol":"HTTP/1.1",
        "requestId":"a3590457-cac2-4f10-8fc9-e47114bf7c62",
        "requestTime":"02/Feb/2023:11:45:26 +0000",
        "requestTimeEpoch":1675338326,
        "resourceId":"123456",
        "resourcePath":"/hello",
-       "stage":"Prod"
+       "stage":"default"
     },
-    "resource":"/tracks/{id}",
+    "resource":"/playlists",
     "stageVariables":"",
     "version":"1.0"
  }
