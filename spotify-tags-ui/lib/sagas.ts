@@ -19,51 +19,60 @@ import { toast } from "react-toastify";
 const spotifyApi: SpotifyAPI = createSpotifyAPI();
 
 function* loadAllTracks(action: PayloadAction<boolean>) {
-  try {
-    const isPreviewMode = action.payload;
+  const isPreviewMode = action.payload;
+  if (isPreviewMode) {
     yield put(Actions.setPreviewMode(isPreviewMode));
-    const tracks: Array<Track> = isPreviewMode ? previewData : yield call(spotifyApi.fetchAllTracks);
+    yield put(Actions.tracksLoadedSuccessfully(previewData));
+    return;
+  }
+
+  try {
+    const tracks: Array<Track> = yield call(toast.promise, spotifyApi.fetchAllTracks(), {
+      error: "failed to load tracks, try again !!",
+    });
     yield put(Actions.tracksLoadedSuccessfully(tracks));
   } catch (err: unknown) {
     console.error(err);
-    toast.error("failed to load tracks");
     yield put(Actions.fetchAllTracksFailure());
   }
 }
 
 function* updateTags({ payload: tag }: PayloadAction<string>) {
-  try {
-    const isPreviewMode: boolean = yield select(isPreviewModeSelector);
-    const track: Track = yield select((state) => state.modal.track);
-    const updatedTags = track.tags?.includes(tag) ? track.tags.filter((t) => !eq(tag, t)) : track.tags.concat(tag);
+  const isPreviewMode: boolean = yield select(isPreviewModeSelector);
+  const track: Track = yield select((state) => state.modal.track);
+  const updatedTags = track.tags?.includes(tag) ? track.tags.filter((t) => !eq(tag, t)) : track.tags.concat(tag);
 
-    if (updatedTags.length > 0) {
-      const updatedTrack: Track = isPreviewMode
-        ? { ...track, tags: updatedTags }
-        : yield call(spotifyApi.patchTrack, track.id, updatedTags);
-      yield put(Actions.trackUpdated(updatedTrack));
-    } else {
-      // delete track since it has no more tags
-      yield put(deleteTrackAction(track.id));
-      yield put(Actions.closeModal());
-    }
-  } catch (err: unknown) {
-    console.error(err);
-    toast.error("failed to update tag, try again");
+  if (isPreviewMode) {
+    yield put(Actions.trackUpdated({ ...track, tags: updatedTags }));
+    return;
   }
+
+  if (!updateTags.length) {
+    // delete track since it has no more tags
+    yield put(deleteTrackAction(track.id));
+    yield put(Actions.closeModal());
+    return;
+  }
+
+  const updatedTrack: Track = yield call(toast.promise, spotifyApi.patchTrack(track.id, updatedTags), {
+    error: "failed to update tags",
+  });
+  yield put(Actions.trackUpdated(updatedTrack));
 }
 
 function* deleteTrackWorker(action: PayloadAction<string>) {
-  try {
-    const isPreviewMode: boolean = yield select(isPreviewModeSelector);
-    if (!isPreviewMode) {
-      yield call(spotifyApi.deleteTrack, action.payload);
-    }
+  const isPreviewMode: boolean = yield select(isPreviewModeSelector);
+  if (isPreviewMode) {
     yield put(Actions.trackDeleted(action.payload));
-  } catch (err: unknown) {
-    console.error(err);
-    toast.error("failed to update tags, try again !");
+    return;
   }
+
+  yield call(toast.promise, spotifyApi.deleteTrack(action.payload), {
+    pending: "deleting track",
+    success: "track deleted",
+    error: "failed to delete track",
+  });
+  yield put(Actions.trackDeleted(action.payload));
 }
 
 function* createPlaylistWorker() {
