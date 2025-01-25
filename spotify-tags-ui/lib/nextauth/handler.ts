@@ -17,8 +17,11 @@ export const handler = NextAuth({
       return newSession;
     },
     async jwt({ token, account }) {
-      const extendedToken: ExtendedJWT = { ...token, accessToken: account?.access_token };
-      return extendedToken;
+      if (account) {
+        const extendedToken: ExtendedJWT = { ...token, accessToken: account?.access_token };
+        return extendedToken;
+      }
+      return token;
     },
   },
   debug: true,

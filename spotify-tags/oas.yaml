@@ -121,7 +121,7 @@ paths:
             statusCode: 200
       summary: create private playlist
       security:
-        - SpotifyAccessToken: []
+        - SpotifyAccessTokenAuthorizer: []
       requestBody:
         content:
           application/json:
@@ -148,10 +148,15 @@ paths:
 
 components:
   securitySchemes:
-    SpotifyAccessToken:
-      type: apiKey
-      in: header
-      name: x-spotify-access-token
+    SpotifyAccessTokenAuthorizer:
+      type: "apiKey"
+      name: "x-spotify-access-token"
+      in: "header"
+      x-amazon-apigateway-authtype: "custom"
+      x-amazon-apigateway-authorizer:
+        authorizerUri: "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:462555053910:function:spotify-tags-LambdaAuthorizer-8Cw5itO7ugqi/invocations"
+        authorizerResultTtlInSeconds: 300
+        type: "token"
   schemas:
     Track:
       type: object

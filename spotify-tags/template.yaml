@@ -26,6 +26,9 @@ Resources:
     Properties:
       CodeUri: .
       Handler: aws_lambda.app.lambda_handler
+      LoggingConfig:
+        LogFormat: JSON
+        LogGroup: !Ref ServiceName
       Architectures:
       - x86_64
       Tracing: Active
@@ -45,6 +48,20 @@ Resources:
       Tags:
         LambdaPowertools: python
 
+  LambdaAuthorizer:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: authorizer.app.lambda_handler
+      LoggingConfig:
+        LogFormat: JSON
+        LogGroup: !Join ['-', [!Ref ServiceName, 'authorizer']]
+        ApplicationLogLevel: DEBUG
+      Architectures:
+        - x86_64
+      Tags:
+        LambdaPowertools: python
+
   PrototypeApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -58,6 +75,14 @@ Resources:
           Name: 'AWS::Include'
           Parameters:
             Location: oas.yaml
+      Auth:
+        InvokeRole: CALLER_CREDENTIALS
+        Authorizers:
+          SpotifyAccessTokenAuthorizer:
+            FunctionArn: !GetAtt LambdaAuthorizer.Arn
+            Identity:
+              Header: x-spotify-access-token
+              ReauthorizeEvery: 300
 
   # grant permission to API gateway to invoke lambda function
   LambdaInvokerPermission:
