@@ -6,8 +6,9 @@ axios.interceptors.request.use(
     const token = sessionStorage.getItem("token");
     if (token != null) {
       config.headers = { ...config.headers, "x-spotify-access-token": token };
+    } else {
+      console.warn("token is NOT set on sessionStorage");
     }
-    console.warn("token is NOT set on sessionStorage");
     return config;
   },
   (err) => Promise.reject(err),
