@@ -29,6 +29,7 @@ Resources:
       LoggingConfig:
         LogFormat: JSON
         LogGroup: !Ref ServiceName
+        ApplicationLogLevel: DEBUG
       Architectures:
       - x86_64
       Tracing: Active
