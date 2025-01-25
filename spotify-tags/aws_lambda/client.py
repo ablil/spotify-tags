@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import functools
+import logging
 from http import HTTPStatus
 
 import spotipy
@@ -9,6 +10,7 @@ from spotipy import Spotify
 
 @functools.cache
 def get_client(access_token: str) -> Spotify:
+    logging.debug("creating client", extra={'token': access_token})
     return spotipy.Spotify(auth=access_token, auth_manager=None)
 
 

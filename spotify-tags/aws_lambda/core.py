@@ -27,7 +27,7 @@ class SpotifyTagger:
 
     def save_spotify_labels(self, data: SpotifyLabel):
         track = self.spotify_client.track(data.spotify_track)
-        logger.debug("track metadata", track)
+        logger.debug("track metadata", extra={'track': track})
 
         result = self.table.put_item(Item={
             'id': track['id'],
@@ -35,11 +35,11 @@ class SpotifyTagger:
             'metadata': track,
             'last_updated': int(datetime.datetime.now().timestamp()),
         })
-        logger.info(f"saved track successfully", result)
+        logger.info("saved track successfully", extra={'track': result})
 
     # TODO: maybe you should cache this method
     def fetch_all(self):
-        logger.info("trying to get all data")
+        logger.info("scanning table")
         items = self.table.scan()['Items']
         for item in items:
             # set data type is not serializable by json library
@@ -48,11 +48,11 @@ class SpotifyTagger:
 
     def delete_track(self, id: str):
         self.table.delete_item(Key={'id': id})
-        logger.info("deleted track successfully", id)
+        logger.info(f"deleted track successfully {id}")
 
     def patch_track(self, id: str, param: List[str]):
         # TODO: handle case where all tags are removed
-        logger.info("trying to update tags", id, param)
+        logger.info("updating track with new tags", extra={'id': id, 'tags': param})
         result = self.table.update_item(
             Key={'id': id},
             UpdateExpression='SET tags = :tags, last_updated = :last_updated',

@@ -35,14 +35,14 @@ def get_all_tracks():
 
 @app.delete("/tracks/<id>")
 def delete_track(id: str):
-    logger.info("got request to delete track", id)
+    logger.info(f"got request to delete track with id {id}")
     tagger.delete_track(id)
     return None
 
 @app.patch('/tracks/<id>')
 def patch_track(id: str):
-    logger.info("got request to patch track", id)
     request_body: dict = app.current_event.json_body
+    logger.info(f"got request to patch track with id {id}", extra={'request_body': request_body})
     assert 'tags' in request_body
 
     return tagger.patch_track(id, request_body['tags'])
@@ -50,8 +50,10 @@ def patch_track(id: str):
 
 @app.post("/label-track")
 def label_track():
-    logger.info("got request to label a Spotify track")
     request_body: dict = app.current_event.json_body
+    logger.info("got request to label a Spotify track", extra={'request-body': request_body})
+    assert 'track' in request_body
+    assert 'labels' in request_body
     labels: SpotifyLabel = SpotifyLabel(
         spotify_track=request_body['track'],
         labels=set(filter(lambda label: len(label) > 1 ,request_body['labels'].split(' ')))
@@ -61,9 +63,9 @@ def label_track():
 
 @app.post("/playlists")
 def create_playlist():
-    logger.info("got request to create playlist")
+    request_body: dict = app.current_event.json_body
+    logger.info("got request to create playlist", extra={'request-body': request_body})
     try:
-        request_body: dict = app.current_event.json_body
         access_token = app.current_event.headers.get('x-spotify-access-token')
         playlist = create_private_playlist(request_body['tags'], request_body['tracks'], access_token)
         return playlist
