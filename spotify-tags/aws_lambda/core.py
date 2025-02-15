@@ -29,6 +29,10 @@ class SpotifyTagger:
         track = self.spotify_client.track(data.spotify_track)
         logger.debug("track metadata", extra={'track': track})
 
+        if 'Item' in self.table.get_item(Key={'id': track['id']}):
+            self.patch_track(track['id'], list(data.labels))
+            return
+
         result = self.table.put_item(Item={
             'id': track['id'],
             'tags': set(map(lambda item: item.lower(), data.labels)),
