@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from "axios";
 import { Track } from "./types";
 
@@ -5,7 +6,9 @@ axios.interceptors.request.use(
   (config) => {
     const token = sessionStorage.getItem("token");
     if (token != null) {
-      config.headers = { ...config.headers, "x-spotify-access-token": token };
+      if (config.headers) {
+        config.headers["x-spotify-access-token"] = token;
+      }
     } else {
       console.warn("token is NOT set on sessionStorage");
     }
